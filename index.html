@@ -3,127 +3,154 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portfolio | Future Engineer</title>
+    <title>Software Portfolio</title>
     <style>
         :root {
-            --bg: #0d1117; --card: #161b22; --text: #c9d1d9;
-            --accent: #58a6ff; --border: #30363d;
+            --bg: #121212;
+            --text: #ffffff;
+            --accent-blue: #7ec7e8;
+            --accent-red: #8b2d2d;
+            --accent-purple: #7a94cc;
+            --card-bg: #1e1e1e;
         }
 
         body {
-            background-color: var(--bg); color: var(--text);
-            font-family: 'Segoe UI', system-ui, sans-serif;
-            margin: 0; overflow-x: hidden;
-            scroll-behavior: smooth;
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: 'Pretendard', sans-serif;
+            margin: 0; padding: 0;
+            line-height: 1.6;
+            overflow-x: hidden;
         }
 
-        .container { max-width: 800px; margin: 0 auto; padding: 40px 20px; }
+        .container { max-width: 1000px; margin: 0 auto; padding: 60px 20px; }
 
-        /* --- 로봇 애니메이션 CSS --- */
-        .robot-container { text-align: center; margin-bottom: 20px; animation: float 3s ease-in-out infinite; }
-        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
-        
-        .robot { font-size: 50px; cursor: pointer; display: inline-block; transition: transform 0.3s; }
-        .robot:hover { transform: scale(1.2) rotate(10deg); }
-        .wave { display: inline-block; animation: wave 2s infinite; transform-origin: 70% 70%; }
-        @keyframes wave { 0%, 100% { transform: rotate(0deg); } 50% { transform: rotate(20deg); } }
+        /* --- 상단 헤더 --- */
+        .hero { text-align: center; margin-bottom: 80px; animation: fadeIn 1s ease-out; }
+        .hero h1 { font-size: 3rem; margin-bottom: 10px; }
+        .hero p { color: #888; font-size: 1.2rem; }
 
-        /* --- 헤더 및 애니메이션 --- */
-        header { 
-            text-align: center; margin-bottom: 60px;
-            animation: fadeInUp 1s ease-out;
+        /* --- 박스형 강조 텍스트 --- */
+        .highlight-box {
+            display: inline-block;
+            padding: 10px 25px;
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin: 20px 0;
+            border-radius: 4px;
+            animation: slideIn 0.8s ease-out forwards;
         }
-        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .blue-box { background-color: var(--accent-blue); color: #000; }
+        .red-box { background-color: var(--accent-red); color: #fff; float: right; }
+        .purple-box { background-color: var(--accent-purple); color: #000; clear: both; margin-top: 40px; }
 
-        .catchphrase { color: var(--accent); font-family: monospace; font-size: 1.1rem; }
+        /* --- 귀여운 로봇 & 별 캐릭터 --- */
+        .char-container { position: relative; height: 100px; margin: 40px 0; }
+        .star { font-size: 60px; position: absolute; left: 60%; animation: bounce 2s infinite; cursor: pointer; }
+        .robot { font-size: 60px; position: absolute; right: 10%; bottom: -50px; animation: wave 2s infinite; }
 
-        /* --- 활동 카드 (클릭 가능) --- */
-        .project-card {
-            background: var(--card); border: 1px solid var(--border);
-            border-radius: 12px; margin-bottom: 15px; cursor: pointer;
-            overflow: hidden; transition: 0.3s;
+        /* --- 활동 섹션 (아코디언) --- */
+        .activity-section { margin-top: 100px; clear: both; }
+        .activity-card {
+            background: var(--card-bg);
+            border: 1px solid #333;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            cursor: pointer;
+            transition: 0.3s;
         }
-        .project-card:hover { border-color: var(--accent); }
-
-        .project-header {
-            padding: 20px; display: flex; justify-content: space-between; align-items: center;
+        .activity-card:hover { border-color: var(--accent-blue); }
+        .card-header { padding: 20px; display: flex; justify-content: space-between; align-items: center; }
+        .card-content { 
+            max-height: 0; overflow: hidden; padding: 0 20px; color: #bbb;
+            transition: max-height 0.4s ease, padding 0.4s ease;
         }
-        .project-header h3 { margin: 0; color: var(--accent); font-size: 1.1rem; }
+        .activity-card.active .card-content { max-height: 300px; padding-bottom: 20px; }
 
-        /* 상세 내용 (처음엔 숨김) */
-        .project-content {
-            max-height: 0; padding: 0 20px; color: #8b949e;
-            transition: max-height 0.3s ease-out, padding 0.3s;
-            border-top: 0 solid var(--border);
-        }
-        .project-card.active .project-content {
-            max-height: 500px; padding: 20px; border-top-width: 1px;
-        }
-        .arrow { transition: transform 0.3s; color: var(--accent); }
-        .project-card.active .arrow { transform: rotate(180deg); }
+        /* --- 애니메이션 --- */
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideIn { from { transform: translateX(-30px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
+        @keyframes wave { 0%, 100% { transform: rotate(0); } 50% { transform: rotate(15deg); } }
 
-        /* 기술 태그 */
-        .tags { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
-        .tag { background: #238636; color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.7rem; }
+        .clear { clear: both; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <div class="robot-container">
-        <div class="robot">🤖<span class="wave">👋</span></div>
-        <p style="font-size: 0.8rem; color: #8b949e;">Click me!</p>
-    </div>
-
-    <header>
-        <div class="catchphrase">> [여기에 시선을 끌 문구를 입력하세요]</div>
-        <h1>안녕하세요, [이름]입니다.</h1>
-        <p>[여기에 간단한 소개를 적어주세요]</p>
+    <header class="hero">
+        <h1>[이곳에 메인 제목을 입력하세요]</h1>
+        <p>[이곳에 서브 문구를 입력하세요]</p>
+        <div style="font-size: 2rem;">∨</div>
     </header>
 
-    <section>
-        <h2 style="border-left: 4px solid var(--accent); padding-left: 15px;"># Activities</h2>
+    <div class="highlight-box blue-box">
+        [강조 문구 1 입력]
+    </div>
+
+    <div style="margin: 40px 0;">
+        <p>🏫 [소속/지망]</p>
+        <p>💻 [관심 분야]</p>
+        <p>[이름]</p>
+        <div class="char-container">
+            <div class="star">⭐</div> </div>
+    </div>
+
+    <div class="highlight-box red-box">
+        [강조 문구 2 입력]
+    </div>
+
+    <div class="clear"></div>
+
+    <div style="margin: 60px 0; color: #ccc;">
+        <p>[나에 대한 구체적인 철학이나 성격을 입력하세요]</p>
+        <p>⚙️ <b>&lt;Technical Skills/&gt;</b></p>
+        <p>[배운 언어들에 대해 입력하세요 - Python, HTML, CSS, JS]</p>
+    </div>
+
+    <div class="highlight-box purple-box">
+        [강조 문구 3 입력]
+    </div>
+
+    <div class="robot">🤖</div> <section class="activity-section">
+        <h2># 1st Year Activities</h2>
         
-        <div class="project-card" onclick="this.classList.toggle('active')">
-            <div class="project-header">
-                <div>
-                    <h3>01. [활동 제목 1]</h3>
-                    <div class="tags"><span class="tag">Python</span></div>
-                </div>
-                <div class="arrow">▼</div>
+        <div class="activity-card" onclick="this.classList.toggle('active')">
+            <div class="card-header">
+                <span>01. [활동 제목을 입력하세요]</span>
+                <span>▼</span>
             </div>
-            <div class="project-content">
-                [여기에 상세 설명을 적어주세요. 이 칸은 평소엔 숨겨져 있다가 클릭하면 나타납니다!]
+            <div class="card-content">
+                [여기에 상세 활동 내용, 사용 기술, 느낀 점을 채워주세요.]
             </div>
         </div>
 
-        <div class="project-card" onclick="this.classList.toggle('active')">
-            <div class="project-header">
-                <div>
-                    <h3>02. [활동 제목 2]</h3>
-                    <div class="tags"><span class="tag">HTML/CSS</span></div>
-                </div>
-                <div class="arrow">▼</div>
+        <div class="activity-card" onclick="this.classList.toggle('active')">
+            <div class="card-header">
+                <span>02. [활동 제목을 입력하세요]</span>
+                <span>▼</span>
             </div>
-            <div class="project-content">
-                [활동에 대한 구체적인 경험, 해결한 문제, 느낀 점 등을 자세히 적어보세요.]
+            <div class="card-content">
+                [상세 내용을 입력하세요.]
             </div>
         </div>
 
-        </section>
+        <div class="activity-card" onclick="this.classList.toggle('active')">
+            <div class="card-header">
+                <span>03. [활동 제목을 입력하세요]</span>
+                <span>▼</span>
+            </div>
+            <div class="card-content">
+                [상세 내용을 입력하세요.]
+            </div>
+        </div>
+    </section>
 
-    <footer style="text-align: center; margin-top: 100px; color: #484f58; font-size: 0.8rem;">
+    <footer style="margin-top: 100px; text-align: center; color: #555;">
         <p>© 2024 [이름] Portfolio. All Rights Reserved.</p>
     </footer>
 </div>
-
-<script>
-    // 로봇을 클릭하면 인사 문구가 바뀌는 작은 이벤트
-    const robot = document.querySelector('.robot');
-    robot.onclick = () => {
-        alert("반가워요! 저와 함께 코딩의 세계로 떠나볼까요? 🚀");
-    };
-</script>
 
 </body>
 </html>
