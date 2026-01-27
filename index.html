@@ -3,154 +3,232 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Software Portfolio</title>
+    <title>Portfolio | Jeon Heejae</title>
     <style>
+        @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+
         :root {
-            --bg: #121212;
+            --bg: #101010;
             --text: #ffffff;
-            --accent-blue: #7ec7e8;
-            --accent-red: #8b2d2d;
-            --accent-purple: #7a94cc;
+            --accent-blue: #5ce1e6; /* 시원한 민트 블루 */
+            --accent-red: #ff5c5c;  /* 강렬한 레드 */
+            --accent-purple: #c780ff; /* 몽환적인 퍼플 */
             --card-bg: #1e1e1e;
         }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
             background-color: var(--bg);
             color: var(--text);
             font-family: 'Pretendard', sans-serif;
-            margin: 0; padding: 0;
-            line-height: 1.6;
-            overflow-x: hidden;
+            overflow: hidden; /* 스크롤 스냅을 위해 기본 스크롤 숨김 */
         }
 
-        .container { max-width: 1000px; margin: 0 auto; padding: 60px 20px; }
+        /* --- 풀 페이지 스크롤 설정 --- */
+        .container {
+            height: 100vh;
+            overflow-y: scroll;
+            scroll-snap-type: y mandatory;
+            scroll-behavior: smooth;
+        }
 
-        /* --- 상단 헤더 --- */
-        .hero { text-align: center; margin-bottom: 80px; animation: fadeIn 1s ease-out; }
-        .hero h1 { font-size: 3rem; margin-bottom: 10px; }
-        .hero p { color: #888; font-size: 1.2rem; }
+        section {
+            height: 100vh;
+            scroll-snap-align: start;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            opacity: 0;
+            transition: opacity 1s ease-in-out, transform 1s ease-in-out;
+            transform: translateY(20px);
+        }
 
-        /* --- 박스형 강조 텍스트 --- */
+        /* 섹션이 보일 때 애니메이션 */
+        section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* --- 텍스트 디자인 요소 --- */
+        h1 { font-size: 4rem; margin-bottom: 20px; text-align: center; line-height: 1.2; }
+        p { font-size: 1.2rem; color: #888; margin-bottom: 10px; }
+        
+        .school { 
+            color: var(--accent-blue); 
+            font-weight: bold; 
+            font-size: 1.5rem; 
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+        }
+
+        /* 박스형 텍스트 */
         .highlight-box {
-            display: inline-block;
-            padding: 10px 25px;
-            font-size: 2.5rem;
-            font-weight: bold;
+            padding: 15px 40px;
+            font-size: 3rem;
+            font-weight: 800;
             margin: 20px 0;
-            border-radius: 4px;
-            animation: slideIn 0.8s ease-out forwards;
+            display: inline-block;
+            transform: skew(-10deg); /* 살짝 기울여서 역동적인 느낌 */
         }
         .blue-box { background-color: var(--accent-blue); color: #000; }
-        .red-box { background-color: var(--accent-red); color: #fff; float: right; }
-        .purple-box { background-color: var(--accent-purple); color: #000; clear: both; margin-top: 40px; }
+        .red-box { background-color: var(--accent-red); color: #fff; }
+        .purple-box { background-color: var(--accent-purple); color: #000; }
 
-        /* --- 귀여운 로봇 & 별 캐릭터 --- */
-        .char-container { position: relative; height: 100px; margin: 40px 0; }
-        .star { font-size: 60px; position: absolute; left: 60%; animation: bounce 2s infinite; cursor: pointer; }
-        .robot { font-size: 60px; position: absolute; right: 10%; bottom: -50px; animation: wave 2s infinite; }
+        /* --- 캐릭터 애니메이션 --- */
+        .robot { 
+            font-size: 80px; 
+            margin-top: 30px; 
+            animation: float 3s ease-in-out infinite; 
+            cursor: pointer;
+        }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }
 
-        /* --- 활동 섹션 (아코디언) --- */
-        .activity-section { margin-top: 100px; clear: both; }
+        /* --- 활동 카드 (아코디언) --- */
+        .activity-container { width: 100%; max-width: 800px; padding: 0 20px; }
         .activity-card {
             background: var(--card-bg);
             border: 1px solid #333;
-            border-radius: 8px;
+            border-radius: 12px;
             margin-bottom: 15px;
             cursor: pointer;
+            overflow: hidden;
             transition: 0.3s;
+            text-align: left;
         }
-        .activity-card:hover { border-color: var(--accent-blue); }
-        .card-header { padding: 20px; display: flex; justify-content: space-between; align-items: center; }
+        .activity-card:hover { border-color: var(--accent-blue); transform: translateX(10px); }
+        
+        .card-header { 
+            padding: 20px; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+        .card-header span:first-child { color: var(--accent-blue); margin-right: 10px; }
+        
         .card-content { 
-            max-height: 0; overflow: hidden; padding: 0 20px; color: #bbb;
-            transition: max-height 0.4s ease, padding 0.4s ease;
+            max-height: 0; 
+            padding: 0 20px; 
+            color: #ccc; 
+            transition: max-height 0.5s ease, padding 0.5s ease;
+            font-size: 1rem;
+            line-height: 1.6;
         }
-        .activity-card.active .card-content { max-height: 300px; padding-bottom: 20px; }
+        .activity-card.active .card-content { 
+            max-height: 300px; 
+            padding-bottom: 20px; 
+            border-top: 1px solid #333;
+        }
 
-        /* --- 애니메이션 --- */
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        @keyframes slideIn { from { transform: translateX(-30px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
-        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
-        @keyframes wave { 0%, 100% { transform: rotate(0); } 50% { transform: rotate(15deg); } }
+        /* --- 스크롤 유도 아이콘 --- */
+        .scroll-down {
+            position: absolute;
+            bottom: 30px;
+            animation: bounce 2s infinite;
+            color: #555;
+            font-size: 0.9rem;
+        }
+        @keyframes bounce { 0%, 20%, 50%, 80%, 100% {transform: translateY(0);} 40% {transform: translateY(-10px);} 60% {transform: translateY(-5px);} }
 
-        .clear { clear: both; }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <header class="hero">
-        <h1>[이곳에 메인 제목을 입력하세요]</h1>
-        <p>[이곳에 서브 문구를 입력하세요]</p>
-        <div style="font-size: 2rem;">∨</div>
-    </header>
+<div class="container" id="mainContainer">
+    
+    <section id="page1">
+        <p class="school">DAEJEON DAESHIN HIGH SCHOOL</p>
+        <h1>
+            상상을 코드로,<br>
+            논리를 현실로.
+        </h1>
+        <p>Software Engineer Portfolio</p>
+        <div class="highlight-box blue-box">JEON HEEJAE</div>
+        <div class="scroll-down">Scroll Down ↓</div>
+    </section>
 
-    <div class="highlight-box blue-box">
-        [강조 문구 1 입력]
-    </div>
+    <section id="page2">
+        <p>My Philosophy</p>
+        <div class="highlight-box red-box">Thinking in Algorithms</div>
+        <p style="margin-top: 20px;">
+            "복잡한 문제를 가장 단순한 논리로 해결합니다."
+        </p>
+        <div style="margin-top: 40px; text-align: center;">
+            <p>💻 Tech Stacks</p>
+            <span style="font-family: monospace; color: var(--accent-blue); font-size: 1.2rem;">
+                [ Python · HTML · CSS · JavaScript ]
+            </span>
+        </div>
+        <div class="robot">🤖</div>
+    </section>
 
-    <div style="margin: 40px 0;">
-        <p>🏫 [소속/지망]</p>
-        <p>💻 [관심 분야]</p>
-        <p>[이름]</p>
-        <div class="char-container">
-            <div class="star">⭐</div> </div>
-    </div>
-
-    <div class="highlight-box red-box">
-        [강조 문구 2 입력]
-    </div>
-
-    <div class="clear"></div>
-
-    <div style="margin: 60px 0; color: #ccc;">
-        <p>[나에 대한 구체적인 철학이나 성격을 입력하세요]</p>
-        <p>⚙️ <b>&lt;Technical Skills/&gt;</b></p>
-        <p>[배운 언어들에 대해 입력하세요 - Python, HTML, CSS, JS]</p>
-    </div>
-
-    <div class="highlight-box purple-box">
-        [강조 문구 3 입력]
-    </div>
-
-    <div class="robot">🤖</div> <section class="activity-section">
-        <h2># 1st Year Activities</h2>
+    <section id="page3">
+        <div class="highlight-box purple-box" style="font-size: 2rem;">1st Year Activities</div>
         
-        <div class="activity-card" onclick="this.classList.toggle('active')">
-            <div class="card-header">
-                <span>01. [활동 제목을 입력하세요]</span>
-                <span>▼</span>
+        <div class="activity-container">
+            <div class="activity-card" onclick="toggleCard(this)">
+                <div class="card-header">
+                    <div><span>01.</span> [여기에 활동 제목을 입력하세요]</div>
+                    <div style="font-size: 0.8rem;">▼</div>
+                </div>
+                <div class="card-content">
+                    [여기에 활동 내용을 입력하세요. 어떤 문제를 발견했고, 어떤 코드로 해결했는지 구체적으로 적으면 좋습니다.]
+                </div>
             </div>
-            <div class="card-content">
-                [여기에 상세 활동 내용, 사용 기술, 느낀 점을 채워주세요.]
-            </div>
-        </div>
 
-        <div class="activity-card" onclick="this.classList.toggle('active')">
-            <div class="card-header">
-                <span>02. [활동 제목을 입력하세요]</span>
-                <span>▼</span>
+            <div class="activity-card" onclick="toggleCard(this)">
+                <div class="card-header">
+                    <div><span>02.</span> [여기에 활동 제목을 입력하세요]</div>
+                    <div style="font-size: 0.8rem;">▼</div>
+                </div>
+                <div class="card-content">
+                    [여기에 활동 내용을 입력하세요. 예: 파이썬을 이용한 데이터 분석 프로젝트 등]
+                </div>
             </div>
-            <div class="card-content">
-                [상세 내용을 입력하세요.]
-            </div>
-        </div>
 
-        <div class="activity-card" onclick="this.classList.toggle('active')">
-            <div class="card-header">
-                <span>03. [활동 제목을 입력하세요]</span>
-                <span>▼</span>
-            </div>
-            <div class="card-content">
-                [상세 내용을 입력하세요.]
+            <div class="activity-card" onclick="toggleCard(this)">
+                <div class="card-header">
+                    <div><span>03.</span> [여기에 활동 제목을 입력하세요]</div>
+                    <div style="font-size: 0.8rem;">▼</div>
+                </div>
+                <div class="card-content">
+                    [여기에 활동 내용을 입력하세요.]
+                </div>
             </div>
         </div>
     </section>
 
-    <footer style="margin-top: 100px; text-align: center; color: #555;">
-        <p>© 2024 [이름] Portfolio. All Rights Reserved.</p>
-    </footer>
+    <section id="page4">
+        <h1>Ready to<br><span style="color: var(--accent-blue)">Debug</span> the World.</h1>
+        <p style="margin-top: 30px;">더 나은 세상을 위해 끊임없이 고민합니다.</p>
+        <p style="margin-top: 50px; font-size: 0.9rem;">© 2024 Jeon Heejae. Daejeon Daeshin High School.</p>
+    </section>
+
 </div>
+
+<script>
+    // 스크롤 시 섹션 등장 애니메이션 (Intersection Observer)
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+            }
+        });
+    }, { threshold: 0.3 });
+
+    document.querySelectorAll('section').forEach(section => {
+        observer.observe(section);
+    });
+
+    // 활동 카드 클릭 시 펼치기 기능
+    function toggleCard(card) {
+        card.classList.toggle('active');
+    }
+</script>
 
 </body>
 </html>
