@@ -11,9 +11,10 @@
             --bg: #101010;
             --text: #ffffff;
             --accent-blue: #5ce1e6; /* 시원한 민트 블루 */
-            --accent-red: #ff5c5c;  /* 강렬한 레드 */
+            --accent-teal: #00c897; /* 새로 추가된 세련된 청록색 */
             --accent-purple: #c780ff; /* 몽환적인 퍼플 */
             --card-bg: #1e1e1e;
+            --code-color: rgba(255, 255, 255, 0.15); /* 배경 코드 색상 */
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -22,7 +23,7 @@
             background-color: var(--bg);
             color: var(--text);
             font-family: 'Pretendard', sans-serif;
-            overflow: hidden; /* 스크롤 스냅을 위해 기본 스크롤 숨김 */
+            overflow: hidden;
         }
 
         /* --- 풀 페이지 스크롤 설정 --- */
@@ -44,6 +45,7 @@
             opacity: 0;
             transition: opacity 1s ease-in-out, transform 1s ease-in-out;
             transform: translateY(20px);
+            overflow: hidden; /* 내부 요소가 밖으로 나가지 않게 */
         }
 
         /* 섹션이 보일 때 애니메이션 */
@@ -53,8 +55,8 @@
         }
 
         /* --- 텍스트 디자인 요소 --- */
-        h1 { font-size: 4rem; margin-bottom: 20px; text-align: center; line-height: 1.2; }
-        p { font-size: 1.2rem; color: #888; margin-bottom: 10px; }
+        h1 { font-size: 4rem; margin-bottom: 20px; text-align: center; line-height: 1.2; z-index: 2; }
+        p { font-size: 1.2rem; color: #888; margin-bottom: 10px; z-index: 2; }
         
         .school { 
             color: var(--accent-blue); 
@@ -62,6 +64,7 @@
             font-size: 1.5rem; 
             letter-spacing: 2px;
             margin-bottom: 10px;
+            z-index: 2;
         }
 
         /* 박스형 텍스트 */
@@ -71,23 +74,44 @@
             font-weight: 800;
             margin: 20px 0;
             display: inline-block;
-            transform: skew(-10deg); /* 살짝 기울여서 역동적인 느낌 */
+            transform: skew(-10deg);
+            z-index: 2;
         }
         .blue-box { background-color: var(--accent-blue); color: #000; }
-        .red-box { background-color: var(--accent-red); color: #fff; }
+        .teal-box { background-color: var(--accent-teal); color: #000; } /* 새 색상 적용 */
         .purple-box { background-color: var(--accent-purple); color: #000; }
 
-        /* --- 캐릭터 애니메이션 --- */
-        .robot { 
-            font-size: 80px; 
-            margin-top: 30px; 
-            animation: float 3s ease-in-out infinite; 
-            cursor: pointer;
+        /* --- PAGE 2 배경 코드 애니메이션 --- */
+        .code-bg-container {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 20px;
+            pointer-events: none; /* 마우스 클릭 방해 안 함 */
+            opacity: 0;
+            transform: translateY(100px); /* 처음에 아래에 위치 */
+            transition: all 1.5s ease-out; /* 부드럽게 올라오는 효과 */
+            z-index: 1; /* 텍스트 뒤에 위치 */
         }
-        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }
 
+        /* 섹션이 보일 때 코드가 올라옴 */
+        section.visible .code-bg-container {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .code-line {
+            font-family: 'Fira Code', monospace;
+            color: var(--code-color);
+            font-size: 1.5rem;
+            line-height: 1.8;
+            white-space: nowrap; /* 줄바꿈 방지 */
+        }
+        
         /* --- 활동 카드 (아코디언) --- */
-        .activity-container { width: 100%; max-width: 800px; padding: 0 20px; }
+        .activity-container { width: 100%; max-width: 800px; padding: 0 20px; z-index: 2; }
         .activity-card {
             background: var(--card-bg);
             border: 1px solid #333;
@@ -124,13 +148,13 @@
             border-top: 1px solid #333;
         }
 
-        /* --- 스크롤 유도 아이콘 --- */
         .scroll-down {
             position: absolute;
             bottom: 30px;
             animation: bounce 2s infinite;
             color: #555;
             font-size: 0.9rem;
+            z-index: 2;
         }
         @keyframes bounce { 0%, 20%, 50%, 80%, 100% {transform: translateY(0);} 40% {transform: translateY(-10px);} 60% {transform: translateY(-5px);} }
 
@@ -152,22 +176,34 @@
     </section>
 
     <section id="page2">
+        <div class="code-bg-container">
+            <div class="code-line">def solve_problem(logic, creativity):</div>
+            <div class="code-line">&nbsp;&nbsp;solution = logic + creativity</div>
+            <div class="code-line">&nbsp;&nbsp;return solution</div>
+            <div class="code-line"></div>
+            <div class="code-line">while (learning):</div>
+            <div class="code-line">&nbsp;&nbsp;grow_up()</div>
+            <div class="code-line">&nbsp;&nbsp;make_world_better()</div>
+            <div class="code-line"></div>
+            <div class="code-line">&lt;!-- HTML, CSS, JS Ready --&gt;</div>
+            <div class="code-line">console.log("Hello, World!");</div>
+        </div>
+
         <p>My Philosophy</p>
-        <div class="highlight-box red-box">Thinking in Algorithms</div>
+        <div class="highlight-box teal-box">Thinking in Algorithms</div>
         <p style="margin-top: 20px;">
             "복잡한 문제를 가장 단순한 논리로 해결합니다."
         </p>
         <div style="margin-top: 40px; text-align: center;">
-            <p>💻 Tech Stacks</p>
+            <p>Tech Stacks</p>
             <span style="font-family: monospace; color: var(--accent-blue); font-size: 1.2rem;">
                 [ Python · HTML · CSS · JavaScript ]
             </span>
         </div>
-        <div class="robot">🤖</div>
-    </section>
+        </section>
 
     <section id="page3">
-        <div class="highlight-box purple-box" style="font-size: 2rem;">1st Year Activities</div>
+        <div class="highlight-box purple-box" style="font-size: 2rem;">2025 Activities</div>
         
         <div class="activity-container">
             <div class="activity-card" onclick="toggleCard(this)">
@@ -204,8 +240,8 @@
 
     <section id="page4">
         <h1>Ready to<br><span style="color: var(--accent-blue)">Debug</span> the World.</h1>
-        <p style="margin-top: 30px;">더 나은 세상을 위해 끊임없이 고민합니다.</p>
-        <p style="margin-top: 50px; font-size: 0.9rem;">© 2024 Jeon Heejae. Daejeon Daeshin High School.</p>
+        <p style="margin-top: 30px;">더 성장하는 나를 위해 끊임없이 고민합니다.</p>
+        <p style="margin-top: 50px; font-size: 0.9rem;">© 2026 Jeon Heejae. Daejeon Daeshin High School.</p>
     </section>
 
 </div>
@@ -216,6 +252,9 @@
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 entry.target.classList.add('visible');
+            } else {
+                // 페이지를 벗어나면 애니메이션 재실행을 위해 클래스 제거 (선택사항)
+                entry.target.classList.remove('visible'); 
             }
         });
     }, { threshold: 0.3 });
