@@ -3,130 +3,127 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portfolio | My Software Journey</title>
+    <title>Portfolio | Future Engineer</title>
     <style>
-        /* 공학적인 느낌을 주는 다크 테마 설정 */
         :root {
-            --bg-color: #0d1117;     /* 깃허브 스타일 어두운 배경 */
-            --card-bg: #161b22;      /* 카드 배경색 */
-            --text-main: #c9d1d9;    /* 기본 텍스트 색상 */
-            --accent: #58a6ff;       /* 강조색 (파란색) */
-            --border-color: #30363d; /* 테두리 색상 */
-            --code-font: 'Fira Code', 'Courier New', monospace;
+            --bg: #0d1117; --card: #161b22; --text: #c9d1d9;
+            --accent: #58a6ff; --border: #30363d;
         }
 
         body {
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0;
-            line-height: 1.7;
+            background-color: var(--bg); color: var(--text);
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            margin: 0; overflow-x: hidden;
+            scroll-behavior: smooth;
         }
 
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 60px 20px;
+        .container { max-width: 800px; margin: 0 auto; padding: 40px 20px; }
+
+        /* --- 로봇 애니메이션 CSS --- */
+        .robot-container { text-align: center; margin-bottom: 20px; animation: float 3s ease-in-out infinite; }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+        
+        .robot { font-size: 50px; cursor: pointer; display: inline-block; transition: transform 0.3s; }
+        .robot:hover { transform: scale(1.2) rotate(10deg); }
+        .wave { display: inline-block; animation: wave 2s infinite; transform-origin: 70% 70%; }
+        @keyframes wave { 0%, 100% { transform: rotate(0deg); } 50% { transform: rotate(20deg); } }
+
+        /* --- 헤더 및 애니메이션 --- */
+        header { 
+            text-align: center; margin-bottom: 60px;
+            animation: fadeInUp 1s ease-out;
         }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* 헤더: 이름 및 흥미 유발 문구 */
-        header {
-            border-bottom: 2px solid var(--border-color);
-            padding-bottom: 40px;
-            margin-bottom: 50px;
-        }
+        .catchphrase { color: var(--accent); font-family: monospace; font-size: 1.1rem; }
 
-        .catchphrase {
-            font-family: var(--code-font);
-            color: var(--accent);
-            font-size: 1.2rem;
-            margin-bottom: 10px;
-        }
-
-        h1 { font-size: 2.5rem; margin: 0; }
-
-        /* 기술 스택 영역 */
-        .skills-section { margin-bottom: 50px; }
-        .skill-list { display: flex; gap: 15px; flex-wrap: wrap; list-style: none; padding: 0; }
-        .skill-item {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            padding: 5px 15px;
-            border-radius: 4px;
-            font-family: var(--code-font);
-            font-size: 0.9rem;
-        }
-
-        /* 활동 리스트 (카드 형태) */
-        h2 { border-left: 4px solid var(--accent); padding-left: 15px; margin-bottom: 30px; }
-        .project-grid { display: grid; gap: 20px; }
+        /* --- 활동 카드 (클릭 가능) --- */
         .project-card {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            padding: 25px;
-            border-radius: 8px;
-            transition: all 0.3s ease;
+            background: var(--card); border: 1px solid var(--border);
+            border-radius: 12px; margin-bottom: 15px; cursor: pointer;
+            overflow: hidden; transition: 0.3s;
         }
-        .project-card:hover {
-            border-color: var(--accent);
-            transform: translateY(-5px);
-        }
-        .project-title { color: var(--accent); margin-top: 0; margin-bottom: 10px; }
-        .project-desc { font-size: 0.95rem; color: #8b949e; }
+        .project-card:hover { border-color: var(--accent); }
 
-        footer { text-align: center; margin-top: 80px; color: #484f58; font-size: 0.8rem; }
+        .project-header {
+            padding: 20px; display: flex; justify-content: space-between; align-items: center;
+        }
+        .project-header h3 { margin: 0; color: var(--accent); font-size: 1.1rem; }
+
+        /* 상세 내용 (처음엔 숨김) */
+        .project-content {
+            max-height: 0; padding: 0 20px; color: #8b949e;
+            transition: max-height 0.3s ease-out, padding 0.3s;
+            border-top: 0 solid var(--border);
+        }
+        .project-card.active .project-content {
+            max-height: 500px; padding: 20px; border-top-width: 1px;
+        }
+        .arrow { transition: transform 0.3s; color: var(--accent); }
+        .project-card.active .arrow { transform: rotate(180deg); }
+
+        /* 기술 태그 */
+        .tags { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
+        .tag { background: #238636; color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.7rem; }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <header>
-            <div class="catchphrase">> [여기에 흥미를 끌 문구를 입력하세요]</div>
-            <h1>안녕하세요, [이름]입니다.</h1>
-            <p>[여기에 간단한 본인 소개를 한두 문장으로 적어주세요]</p>
-        </header>
-
-        <section class="skills-section">
-            <h2>Technical Skills</h2>
-            <ul class="skill-list">
-                <li class="skill-item">Python</li>
-                <li class="skill-item">HTML</li>
-                <li class="skill-item">CSS</li>
-                <li class="skill-item">JavaScript</li>
-            </ul>
-        </section>
-
-        <section>
-            <h2>1st Year Activities</h2>
-            <div class="project-grid">
-                
-                <div class="project-card">
-                    <h3 class="project-title">01. [활동 제목 입력]</h3>
-                    <p class="project-desc">[활동 내용 및 배운 점을 입력하세요]</p>
-                </div>
-
-                <div class="project-card">
-                    <h3 class="project-title">02. [활동 제목 입력]</h3>
-                    <p class="project-desc">[활동 내용 및 배운 점을 입력하세요]</p>
-                </div>
-
-                <div class="project-card">
-                    <h3 class="project-title">03. [활동 제목 입력]</h3>
-                    <p class="project-desc">[활동 내용 및 배운 점을 입력하세요]</p>
-                </div>
-
-                <div class="project-card">
-                    <h3 class="project-title">04. [활동 제목 입력]</h3>
-                    <p class="project-desc">[활동 내용 및 배운 점을 입력하세요]</p>
-                </div>
-
-            </div>
-        </section>
-
-        <footer>
-            <p>© 2024 [내이름] · Built with GitHub Pages</p>
-        </footer>
+<div class="container">
+    <div class="robot-container">
+        <div class="robot">🤖<span class="wave">👋</span></div>
+        <p style="font-size: 0.8rem; color: #8b949e;">Click me!</p>
     </div>
+
+    <header>
+        <div class="catchphrase">> [여기에 시선을 끌 문구를 입력하세요]</div>
+        <h1>안녕하세요, [이름]입니다.</h1>
+        <p>[여기에 간단한 소개를 적어주세요]</p>
+    </header>
+
+    <section>
+        <h2 style="border-left: 4px solid var(--accent); padding-left: 15px;"># Activities</h2>
+        
+        <div class="project-card" onclick="this.classList.toggle('active')">
+            <div class="project-header">
+                <div>
+                    <h3>01. [활동 제목 1]</h3>
+                    <div class="tags"><span class="tag">Python</span></div>
+                </div>
+                <div class="arrow">▼</div>
+            </div>
+            <div class="project-content">
+                [여기에 상세 설명을 적어주세요. 이 칸은 평소엔 숨겨져 있다가 클릭하면 나타납니다!]
+            </div>
+        </div>
+
+        <div class="project-card" onclick="this.classList.toggle('active')">
+            <div class="project-header">
+                <div>
+                    <h3>02. [활동 제목 2]</h3>
+                    <div class="tags"><span class="tag">HTML/CSS</span></div>
+                </div>
+                <div class="arrow">▼</div>
+            </div>
+            <div class="project-content">
+                [활동에 대한 구체적인 경험, 해결한 문제, 느낀 점 등을 자세히 적어보세요.]
+            </div>
+        </div>
+
+        </section>
+
+    <footer style="text-align: center; margin-top: 100px; color: #484f58; font-size: 0.8rem;">
+        <p>© 2024 [이름] Portfolio. All Rights Reserved.</p>
+    </footer>
+</div>
+
+<script>
+    // 로봇을 클릭하면 인사 문구가 바뀌는 작은 이벤트
+    const robot = document.querySelector('.robot');
+    robot.onclick = () => {
+        alert("반가워요! 저와 함께 코딩의 세계로 떠나볼까요? 🚀");
+    };
+</script>
 
 </body>
 </html>
