@@ -5,18 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Portfolio | Jeon Heejae</title>
     <style>
+        /* 폰트 및 리소스 불러오기 */
         @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
-        @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&display=swap'); /* 코드 폰트 추가 */
+        @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&display=swap');
 
         :root {
             --bg: #101010;
             --text: #ffffff;
-            --accent-blue: #5ce1e6; 
-            --accent-teal: #00c897;
-            --accent-purple: #c780ff;
+            --accent-blue: #5ce1e6;   
+            --accent-teal: #00c897;   
+            --accent-purple: #c780ff; 
             --card-bg: #1e1e1e;
-            /* 요청하신 밝고 푸릇한 코드 색상 */
-            --code-color: #64ffda; 
+            --code-color: #64ffda;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -25,20 +25,35 @@
             background-color: var(--bg);
             color: var(--text);
             font-family: 'Pretendard', sans-serif;
-            overflow: hidden; /* 기본 스크롤바 숨김 */
+            overflow: hidden; 
         }
 
-        /* --- 컨테이너 설정 --- */
+        /* --- 왼쪽 상단 고정 로고 --- */
+        .logo {
+            position: fixed;
+            top: 30px;
+            left: 30px;
+            font-family: 'Fira Code', monospace;
+            font-weight: 800;
+            font-size: 1.5rem;
+            color: var(--accent-blue);
+            z-index: 100;
+            border: 2px solid var(--accent-blue);
+            padding: 5px 10px;
+            letter-spacing: 2px;
+        }
+
+        /* --- 풀 페이지 스크롤 컨테이너 --- */
         .container {
             height: 100vh;
             overflow-y: scroll;
             scroll-snap-type: y mandatory;
             scroll-behavior: smooth;
-            /* 스크롤바 숨기기 (기능은 유지) */
-            scrollbar-width: none; /* Firefox */
+            scrollbar-width: none; 
         }
-        .container::-webkit-scrollbar { display: none; /* Chrome, Safari */ }
+        .container::-webkit-scrollbar { display: none; }
 
+        /* --- 개별 섹션 스타일 --- */
         section {
             height: 100vh;
             scroll-snap-align: start;
@@ -49,79 +64,157 @@
             position: relative;
             opacity: 0;
             transition: opacity 1s ease-in-out, transform 1s ease-in-out;
-            transform: translateY(20px);
+            transform: translateY(30px);
             overflow: hidden;
         }
 
-        section.visible { opacity: 1; transform: translateY(0); }
+        section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
 
-        /* --- 텍스트 디자인 요소 --- */
-        h1 { font-size: 4rem; margin-bottom: 20px; text-align: center; line-height: 1.2; z-index: 2; }
+        /* --- 텍스트 디자인 --- */
+        h1 { font-size: 4rem; margin-bottom: 20px; text-align: center; line-height: 1.3; z-index: 2; word-break: keep-all;}
         p { font-size: 1.2rem; color: #bbb; margin-bottom: 10px; z-index: 2; }
         
         .school { 
-            color: var(--accent-blue); font-weight: bold; font-size: 1.5rem; 
-            letter-spacing: 2px; margin-bottom: 10px; z-index: 2;
+            color: var(--accent-blue); 
+            font-weight: bold; 
+            font-size: 1.2rem; 
+            letter-spacing: 1px;
+            margin-bottom: 15px;
+            z-index: 2;
         }
 
+        /* 강조 박스 스타일 */
         .highlight-box {
-            padding: 15px 40px; font-size: 3rem; font-weight: 800; margin: 20px 0;
-            display: inline-block; transform: skew(-10deg); z-index: 2;
+            padding: 15px 40px;
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin: 20px 0;
+            display: inline-block;
+            transform: skew(-10deg);
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            z-index: 2;
+            text-align: center;
         }
         .blue-box { background-color: var(--accent-blue); color: #000; }
         .teal-box { background-color: var(--accent-teal); color: #000; }
         .purple-box { background-color: var(--accent-purple); color: #000; }
 
-        /* --- 배경 코드 애니메이션 (수정됨) --- */
+        /* --- 배경 코드 애니메이션 --- */
         .code-bg-container {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            display: flex; flex-direction: column; justify-content: center;
-            padding: 40px; pointer-events: none;
-            opacity: 0; transform: translateY(50px);
-            transition: all 1.5s ease-out; z-index: 1;
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 40px;
+            pointer-events: none; 
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 1.5s ease-out;
+            z-index: 1;
         }
 
-        section.visible .code-bg-container { opacity: 0.3; transform: translateY(0); }
+        section.visible .code-bg-container {
+            opacity: 0.2; 
+            transform: translateY(0);
+        }
 
         .code-line {
             font-family: 'Fira Code', monospace;
-            color: var(--code-color); /* 밝은 푸른색 */
-            font-size: 1.4rem; line-height: 1.6;
-            white-space: nowrap; font-weight: 600;
-            text-shadow: 0 0 10px rgba(100, 255, 218, 0.3); /* 네온 효과 */
+            color: var(--code-color);
+            font-size: 1.4rem;
+            line-height: 1.6;
+            white-space: nowrap;
+            font-weight: 600;
+            text-shadow: 0 0 8px rgba(100, 255, 218, 0.4);
         }
         
-        /* --- 내비게이션 버튼 (신규 추가) --- */
+        /* --- 내비게이션 버튼 --- */
         .nav-buttons {
-            position: fixed; right: 30px; top: 50%; transform: translateY(-50%);
-            display: flex; flex-direction: column; gap: 20px; z-index: 100;
+            position: fixed;
+            right: 30px;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            z-index: 100;
         }
         .nav-btn {
-            background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2);
-            color: var(--accent-blue); width: 50px; height: 50px; border-radius: 50%;
-            cursor: pointer; display: flex; align-items: center; justify-content: center;
-            font-size: 1.5rem; transition: 0.3s; backdrop-filter: blur(5px);
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: var(--accent-blue);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            transition: 0.3s;
+            backdrop-filter: blur(5px);
         }
         .nav-btn:hover {
-            background: var(--accent-blue); color: #000; transform: scale(1.1);
+            background: var(--accent-blue);
+            color: #000;
+            transform: scale(1.1);
+            box-shadow: 0 0 15px var(--accent-blue);
         }
 
         /* --- 활동 카드 --- */
         .activity-container { width: 100%; max-width: 800px; padding: 0 20px; z-index: 2; }
         .activity-card {
-            background: var(--card-bg); border: 1px solid #333; border-radius: 12px;
-            margin-bottom: 15px; cursor: pointer; overflow: hidden; transition: 0.3s; text-align: left;
+            background: var(--card-bg);
+            border: 1px solid #333;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            cursor: pointer;
+            overflow: hidden;
+            transition: 0.3s;
+            text-align: left;
         }
         .activity-card:hover { border-color: var(--accent-teal); transform: translateX(10px); }
-        .card-header { padding: 20px; display: flex; justify-content: space-between; align-items: center; font-weight: bold; font-size: 1.2rem; }
+        
+        .card-header { 
+            padding: 20px; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
         .card-header span:first-child { color: var(--accent-teal); margin-right: 10px; }
-        .card-content { max-height: 0; padding: 0 20px; color: #ccc; transition: all 0.5s ease; font-size: 1rem; line-height: 1.6; }
-        .activity-card.active .card-content { max-height: 300px; padding-bottom: 20px; border-top: 1px solid #333; }
+        
+        /* 내용이 길어져서 max-height를 넉넉하게 수정함 */
+        .card-content { 
+            max-height: 0; 
+            padding: 0 20px; 
+            color: #ddd; 
+            transition: max-height 0.6s ease, padding 0.6s ease;
+            font-size: 0.95rem;
+            line-height: 1.7;
+            word-break: keep-all;
+        }
+        .activity-card.active .card-content { 
+            max-height: 2000px; /* 내용이 길어도 잘리지 않도록 수정 */
+            padding-bottom: 30px; 
+            border-top: 1px solid #333;
+        }
+        .card-content h4 { color: var(--accent-blue); margin: 20px 0 10px 0; font-size: 1.1rem; }
+        .card-content ul { list-style: none; padding-left: 10px; }
+        .card-content li { margin-bottom: 8px; position: relative; padding-left: 15px; }
+        .card-content li::before { content: "▹"; color: var(--accent-teal); position: absolute; left: 0; }
+        .card-content strong { color: #fff; font-weight: 700; }
 
     </style>
 </head>
 <body>
+
+<div class="logo">JHJ</div>
 
 <div class="nav-buttons">
     <button class="nav-btn" onclick="prevPage()">▲</button>
@@ -133,8 +226,8 @@
     <section id="page1">
         <p class="school">DAEJEON DAESHIN HIGH SCHOOL</p>
         <h1>
-            상상을 코드로,<br>
-            논리를 현실로.
+            논리로 설계하고,<br>
+            코드로 증명하다.
         </h1>
         <p>Software Engineer Portfolio</p>
         <div class="highlight-box blue-box">JEON HEEJAE</div>
@@ -150,19 +243,19 @@
             <div class="code-line"></div>
             <div class="code-line">&nbsp;&nbsp;def code(self):</div>
             <div class="code-line">&nbsp;&nbsp;&nbsp;&nbsp;while True:</div>
-            <div class="code-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;study()</div>
-            <div class="code-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;create_awesome_things()</div>
+            <div class="code-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;analyze_problem()</div>
+            <div class="code-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;optimize_solution()</div>
         </div>
 
         <p>My Philosophy</p>
-        <div class="highlight-box teal-box">Thinking in Algorithms</div>
-        <p style="margin-top: 20px; z-index: 2;">
-            "복잡한 문제를 가장 단순한 논리로 해결합니다."
+        <div class="highlight-box teal-box">질문이 정답을 만듭니다</div>
+        <p style="margin-top: 20px; z-index: 2; text-align: center;">
+            "현상 이면의 원리를 탐구하고,<br>가장 효율적인 알고리즘으로 구현합니다."
         </p>
         <div style="margin-top: 40px; text-align: center; z-index: 2;">
             <p>Tech Stacks</p>
             <span style="font-family: monospace; color: var(--accent-blue); font-size: 1.2rem;">
-                [ Python · HTML · CSS · JavaScript ]
+                [ Python · HTML/CSS · JS · Arduino ]
             </span>
         </div>
     </section>
@@ -173,31 +266,55 @@
         <div class="activity-container">
             <div class="activity-card" onclick="toggleCard(this)">
                 <div class="card-header">
-                    <div><span>01.</span> [여기에 활동 제목을 입력하세요]</div>
-                    <div>▼</div>
+                    <div><span>01.</span> IoT 기반 전동 킥보드 다인 탑승 감지 시스템</div>
+                    <div style="font-size: 0.8rem;">▼</div>
                 </div>
                 <div class="card-content">
-                    [여기에 활동 내용을 입력하세요.]
+                    <p><strong>[Creative Innovation Project]</strong></p>
+                    
+                    <h4>1. 프로젝트 개요 (Problem)</h4>
+                    <p>전동 킥보드 2인 이상 탑승 사고가 사회적 문제로 대두되었습니다. 단순 경고가 아닌 기술적 제어를 통해 실제 위험 상황만을 정확히 감지하는 시스템을 목표로 했습니다.</p>
+                    
+                    <h4>2. 핵심 솔루션 (Solution Logic)</h4>
+                    <p>단일 센서의 오작동 한계를 극복하기 위해 <strong>센서 융합(Sensor Fusion)</strong> 방식을 채택했습니다.</p>
+                    <ul>
+                        <li><strong>조건 1 (압력):</strong> FSR 센서 4개 중 3개 이상 감지</li>
+                        <li><strong>조건 2 (거리):</strong> 초음파 센서(전/후) 거리 합이 기준치 이하</li>
+                        <li><strong>알고리즘:</strong> 위 두 조건이 <code>AND</code>로 3회 이상 연속 충족될 때만 '위험'으로 판단하여 오탐을 최소화했습니다.</li>
+                    </ul>
+
+                    <h4>3. 하드웨어 구성 (Hardware)</h4>
+                    <ul>
+                        <li><strong>Controller:</strong> Arduino Uno (신호 처리 및 로직 제어)</li>
+                        <li><strong>Sensors:</strong> FSR 압력센서 4EA, 초음파 센서 4EA</li>
+                        <li><strong>Output:</strong> Buzzer (위험 경고음 출력)</li>
+                    </ul>
+
+                    <h4>4. 성장 포인트 (Growth)</h4>
+                    <p>팀장으로서 기술 구현뿐만 아니라 사회적/경제적 관점에서 타당성을 분석했습니다. 특히 센서 값을 단순히 읽는 것을 넘어, <strong>'데이터 누적 판단 알고리즘'</strong>을 통해 시스템의 신뢰도를 높이는 엔지니어링 사고를 길렀습니다.</p>
                 </div>
             </div>
 
             <div class="activity-card" onclick="toggleCard(this)">
                 <div class="card-header">
-                    <div><span>02.</span> [여기에 활동 제목을 입력하세요]</div>
-                    <div>▼</div>
+                    <div><span>02.</span> 반응형 웹 포트폴리오 구축</div>
+                    <div style="font-size: 0.8rem;">▼</div>
                 </div>
                 <div class="card-content">
-                    [여기에 활동 내용을 입력하세요.]
+                    <strong>[목표]</strong> 나만의 개발 아이덴티티를 담은 웹사이트를 직접 구현해보고자 했습니다.<br><br>
+                    <strong>[기술 적용]</strong> HTML5의 시맨틱 태그로 구조를 잡고, CSS3의 <code>Flexbox</code>와 애니메이션(`@keyframes`)을 활용해 인터랙티브한 UI를 설계했습니다. JavaScript로 스크롤 이벤트와 동적 DOM 제어 기능을 추가하여 사용자 경험(UX)을 개선했습니다.<br><br>
+                    <strong>[성과]</strong> GitHub Pages를 통한 정적 웹 호스팅 및 배포의 전 과정을 마스터했습니다.
                 </div>
             </div>
 
             <div class="activity-card" onclick="toggleCard(this)">
                 <div class="card-header">
-                    <div><span>03.</span> [여기에 활동 제목을 입력하세요]</div>
-                    <div>▼</div>
+                    <div><span>03.</span> 컴퓨팅 사고력과 알고리즘 탐구</div>
+                    <div style="font-size: 0.8rem;">▼</div>
                 </div>
                 <div class="card-content">
-                    [여기에 활동 내용을 입력하세요.]
+                    <strong>[활동 내용]</strong> 효율적인 문제 해결을 위해 백준(BOJ) 및 정보 올림피아드 기출 문제를 분석했습니다.<br><br>
+                    <strong>[학습 포인트]</strong> 이중 반복문을 단일 반복문으로 최적화하여 <code>O(n^2)</code>의 시간 복잡도를 <code>O(n)</code>으로 줄이는 경험을 했습니다. 단순 구현을 넘어, 스택/큐 자료구조를 활용해 프로세스 스케줄링 문제를 논리적으로 해결하며 엔지니어링 사고력을 길렀습니다.
                 </div>
             </div>
         </div>
@@ -205,24 +322,27 @@
 
     <section id="page4">
         <h1>Ready to<br><span style="color: var(--accent-blue)">Debug</span> the World.</h1>
-        <p style="margin-top: 30px;">더 성장하는 나를 위해 끊임없이 고민합니다.</p>
-        <p style="margin-top: 50px; font-size: 0.9rem;">© 2026 Jeon Heejae. Daejeon Daeshin High School.</p>
+        <p style="margin-top: 30px;">어제보다 더 효율적인 코드를 위해 고민합니다.</p>
+        
+        <div style="margin-top: 50px; text-align: center; color: #888;">
+            <p style="font-size: 1rem; color: var(--accent-teal); font-weight: bold; margin-bottom: 5px;">Contact Me</p>
+            <p style="font-size: 1.1rem; font-family: 'Fira Code', monospace; margin-bottom: 30px;">25_jhj0105@dshs.kr</p>
+            <p style="font-size: 0.8rem;">© 2026 Jeon Heejae. Daejeon Daeshin High School.</p>
+        </div>
     </section>
 
 </div>
 
 <script>
-    // 페이지 관리 로직
-    const container = document.getElementById('mainContainer');
+    // 페이지 및 스크롤 관리
     const sections = document.querySelectorAll('section');
     let currentIndex = 0;
 
-    // 스크롤 감지 및 애니메이션
+    // 섹션 관찰자 (Intersection Observer)
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 entry.target.classList.add('visible');
-                // 현재 몇 번째 섹션인지 업데이트 (버튼 연동용)
                 currentIndex = Array.from(sections).indexOf(entry.target);
             }
         });
@@ -232,7 +352,7 @@
         observer.observe(section);
     });
 
-    // 버튼 클릭 이동 함수
+    // 버튼 이동 함수
     function nextPage() {
         if (currentIndex < sections.length - 1) {
             currentIndex++;
@@ -247,7 +367,12 @@
         }
     }
 
+    // 카드 펼치기/접기 함수
     function toggleCard(card) {
+        const allCards = document.querySelectorAll('.activity-card');
+        allCards.forEach(c => {
+            if (c !== card) c.classList.remove('active');
+        });
         card.classList.toggle('active');
     }
 </script>
