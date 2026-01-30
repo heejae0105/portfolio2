@@ -5,17 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Portfolio | Jeon Heejae</title>
     <style>
+        /* 폰트 불러오기 (Pretendard: 본문용, Fira Code: 코딩용) */
         @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
         @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&display=swap');
 
         :root {
             --bg: #101010;
             --text: #ffffff;
-            --accent-blue: #5ce1e6; 
-            --accent-teal: #00c897;
-            --accent-purple: #c780ff;
+            --accent-blue: #5ce1e6;   /* 시원한 민트 블루 */
+            --accent-teal: #00c897;   /* 세련된 청록색 */
+            --accent-purple: #c780ff; /* 몽환적인 퍼플 */
             --card-bg: #1e1e1e;
-            --code-color: #64ffda; 
+            --code-color: #64ffda;    /* 밝고 선명한 형광 민트 (배경 코드용) */
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -24,21 +25,23 @@
             background-color: var(--bg);
             color: var(--text);
             font-family: 'Pretendard', sans-serif;
-            /* overflow: hidden;  <-- 삭제: 전체 스크롤 허용 */
+            overflow: hidden; /* 브라우저 기본 스크롤 숨김 */
         }
 
-        /* --- 컨테이너 설정 (수정됨: 잘림 방지) --- */
+        /* --- 풀 페이지 스크롤 컨테이너 --- */
         .container {
-            width: 100%;
             height: 100vh;
-            overflow-y: auto; /* 내용이 길면 스크롤 가능하게 변경 */
+            overflow-y: scroll;
+            scroll-snap-type: y mandatory;
             scroll-behavior: smooth;
+            scrollbar-width: none; /* 파이어폭스 스크롤바 숨김 */
         }
+        .container::-webkit-scrollbar { display: none; /* 크롬, 사파리 스크롤바 숨김 */ }
 
-        /* 섹션 설정 (수정됨: 내용 길이에 맞춰 늘어나도록) */
+        /* --- 개별 섹션 스타일 --- */
         section {
-            min-height: 100vh; /* 고정 높이 대신 최소 높이 사용 */
-            padding: 80px 20px; /* 위아래 여백 확보 */
+            height: 100vh;
+            scroll-snap-align: start;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -46,24 +49,39 @@
             position: relative;
             opacity: 0;
             transition: opacity 1s ease-in-out, transform 1s ease-in-out;
-            transform: translateY(20px);
+            transform: translateY(30px);
+            overflow: hidden;
         }
 
-        section.visible { opacity: 1; transform: translateY(0); }
+        /* 화면에 보일 때 애니메이션 */
+        section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
 
-        /* --- 텍스트 디자인 요소 --- */
-        h1 { font-size: 3.5rem; margin-bottom: 20px; text-align: center; line-height: 1.2; z-index: 2; }
-        p { font-size: 1.1rem; color: #bbb; margin-bottom: 10px; z-index: 2; }
+        /* --- 텍스트 디자인 --- */
+        h1 { font-size: 4rem; margin-bottom: 20px; text-align: center; line-height: 1.2; z-index: 2; }
+        p { font-size: 1.2rem; color: #bbb; margin-bottom: 10px; z-index: 2; }
         
         .school { 
-            color: var(--accent-blue); font-weight: bold; font-size: 1.2rem; 
-            letter-spacing: 2px; margin-bottom: 10px; z-index: 2;
+            color: var(--accent-blue); 
+            font-weight: bold; 
+            font-size: 1.5rem; 
+            letter-spacing: 2px;
+            margin-bottom: 15px;
+            z-index: 2;
         }
 
+        /* 기울어진 텍스트 박스 */
         .highlight-box {
-            padding: 10px 30px; font-size: 2.5rem; font-weight: 800; margin: 20px 0;
-            display: inline-block; transform: skew(-10deg); z-index: 2;
+            padding: 15px 40px;
+            font-size: 3rem;
+            font-weight: 800;
+            margin: 20px 0;
+            display: inline-block;
+            transform: skew(-10deg);
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            z-index: 2;
         }
         .blue-box { background-color: var(--accent-blue); color: #000; }
         .teal-box { background-color: var(--accent-teal); color: #000; }
@@ -71,79 +89,112 @@
 
         /* --- 배경 코드 애니메이션 --- */
         .code-bg-container {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            display: flex; flex-direction: column; justify-content: center;
-            padding: 40px; pointer-events: none;
-            opacity: 0; transform: translateY(50px);
-            transition: all 1.5s ease-out; z-index: 1;
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 40px;
+            pointer-events: none; /* 마우스 클릭 통과 */
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 1.5s ease-out;
+            z-index: 1;
         }
 
-        section.visible .code-bg-container { opacity: 0.3; transform: translateY(0); }
+        section.visible .code-bg-container {
+            opacity: 0.3; /* 은은하게 보임 */
+            transform: translateY(0);
+        }
 
         .code-line {
             font-family: 'Fira Code', monospace;
             color: var(--code-color);
-            font-size: 1.2rem; line-height: 1.6;
-            white-space: nowrap; font-weight: 600;
-            text-shadow: 0 0 10px rgba(100, 255, 218, 0.3);
+            font-size: 1.4rem;
+            line-height: 1.6;
+            white-space: nowrap;
+            font-weight: 600;
+            text-shadow: 0 0 8px rgba(100, 255, 218, 0.4); /* 네온 효과 */
         }
         
-        /* --- 내비게이션 버튼 --- */
+        /* --- 내비게이션 버튼 (오른쪽 화살표) --- */
         .nav-buttons {
-            position: fixed; right: 20px; top: 50%; transform: translateY(-50%);
-            display: flex; flex-direction: column; gap: 15px; z-index: 100;
+            position: fixed;
+            right: 30px;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            z-index: 100;
         }
         .nav-btn {
-            background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2);
-            color: var(--accent-blue); width: 45px; height: 45px; border-radius: 50%;
-            cursor: pointer; display: flex; align-items: center; justify-content: center;
-            font-size: 1.2rem; transition: 0.3s; backdrop-filter: blur(5px);
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: var(--accent-blue);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            transition: 0.3s;
+            backdrop-filter: blur(5px);
         }
         .nav-btn:hover {
-            background: var(--accent-blue); color: #000; transform: scale(1.1);
+            background: var(--accent-blue);
+            color: #000;
+            transform: scale(1.1);
+            box-shadow: 0 0 15px var(--accent-blue);
         }
 
-        /* --- 활동 카드 및 보고서 스타일 --- */
-        .activity-container { width: 100%; max-width: 800px; padding: 0 10px; z-index: 2; }
+        /* --- 활동 카드 (아코디언) --- */
+        .activity-container { width: 100%; max-width: 800px; padding: 0 20px; z-index: 2; }
         .activity-card {
-            background: var(--card-bg); border: 1px solid #333; border-radius: 12px;
-            margin-bottom: 15px; cursor: pointer; overflow: hidden; transition: 0.3s; text-align: left;
+            background: var(--card-bg);
+            border: 1px solid #333;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            cursor: pointer;
+            overflow: hidden;
+            transition: 0.3s;
+            text-align: left;
         }
-        .activity-card:hover { border-color: var(--accent-teal); transform: translateX(5px); }
-        .card-header { padding: 20px; display: flex; justify-content: space-between; align-items: center; font-weight: bold; font-size: 1.1rem; }
+        .activity-card:hover { border-color: var(--accent-teal); transform: translateX(10px); }
+        
+        .card-header { 
+            padding: 20px; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
         .card-header span:first-child { color: var(--accent-teal); margin-right: 10px; }
         
         .card-content { 
-            max-height: 0; padding: 0 20px; color: #ccc; 
-            transition: max-height 0.5s ease, opacity 0.5s ease; 
-            font-size: 1rem; line-height: 1.7; opacity: 0;
-            overflow: hidden; /* 닫혀있을 땐 숨김 */
+            max-height: 0; 
+            padding: 0 20px; 
+            color: #ccc; 
+            transition: max-height 0.5s ease, padding 0.5s ease;
+            font-size: 1rem;
+            line-height: 1.6;
         }
-        
-        /* 활성화 시 스타일 (내용이 다 보이도록 수정) */
         .activity-card.active .card-content { 
-            max-height: 3000px; /* 충분히 크게 잡아서 잘림 방지 */
-            padding-bottom: 40px; 
+            max-height: 300px; 
+            padding-bottom: 20px; 
             border-top: 1px solid #333;
-            opacity: 1;
         }
-
-        /* 보고서 내부 디자인 (사람 냄새나게 수정) */
-        .report-section { margin-top: 30px; border-left: 3px solid var(--accent-teal); padding-left: 20px; margin-bottom: 30px; }
-        .report-title { color: var(--accent-blue); font-weight: bold; font-size: 1.1rem; margin-bottom: 10px; display: block; }
-        .report-text { font-size: 1rem; color: #ddd; margin-bottom: 10px; line-height: 1.8; word-break: keep-all; }
-        .tech-tag { display: inline-block; background: #333; color: var(--accent-teal); padding: 4px 8px; border-radius: 6px; font-size: 0.8rem; margin-right: 6px; font-family: monospace; border: 1px solid #444; margin-bottom: 5px;}
-        .highlight-text { background: rgba(0, 200, 151, 0.1); color: var(--accent-teal); padding: 0 4px; font-weight: bold; }
 
     </style>
 </head>
 <body>
 
 <div class="nav-buttons">
-    <button class="nav-btn" onclick="scrollToPage('page1')">1</button>
-    <button class="nav-btn" onclick="scrollToPage('page2')">2</button>
-    <button class="nav-btn" onclick="scrollToPage('page3')">3</button>
-    <button class="nav-btn" onclick="scrollToPage('page4')">4</button>
+    <button class="nav-btn" onclick="prevPage()">▲</button>
+    <button class="nav-btn" onclick="nextPage()">▼</button>
 </div>
 
 <div class="container" id="mainContainer">
@@ -186,117 +237,90 @@
     </section>
 
     <section id="page3">
-        <div class="highlight-box purple-box" style="font-size: 2rem;">2025 Projects</div>
+        <div class="highlight-box purple-box" style="font-size: 2rem;">2025 Activities</div>
         
         <div class="activity-container">
             <div class="activity-card" onclick="toggleCard(this)">
                 <div class="card-header">
-                    <div><span>01.</span> IoT 전동 킥보드 2인 탑승 감지 시스템</div>
-                    <div style="font-size: 0.8rem; color: #888;">▼ 자세히 보기</div>
+                    <div><span>01.</span> [여기에 활동 제목을 입력하세요]</div>
+                    <div style="font-size: 0.8rem;">▼</div>
                 </div>
                 <div class="card-content">
-                    
-                    <div class="report-section">
-                        <span class="report-title">💡 왜 만들었는가? (Motivation)</span>
-                        <p class="report-text">
-                            학교 주변에서 친구들이 킥보드를 둘이서 타다가 위험한 상황을 겪는 걸 자주 봤습니다. 
-                            법으로 금지되어 있지만, 실제 현장에서는 단속이 어렵다는 점이 문제였습니다. 
-                            그래서 <strong>'사람이 감시하지 않아도 기계가 알아서 2인 탑승을 막을 순 없을까?'</strong>라는 생각으로 프로젝트를 시작했습니다.
-                        </p>
-                    </div>
-
-                    <div class="report-section">
-                        <span class="report-title">🛠️ 기술적 해결 과정 (Logic)</span>
-                        <div style="margin-bottom: 15px;">
-                            <span class="tech-tag">Arduino Uno</span>
-                            <span class="tech-tag">C++</span>
-                            <span class="tech-tag">FSR(압력) 센서</span>
-                            <span class="tech-tag">초음파 센서</span>
-                        </div>
-                        <p class="report-text">
-                            처음엔 간단할 줄 알았지만, 센서 하나만 쓰니까 오작동이 너무 심했습니다. 
-                            가방을 올려도 사람으로 인식하거나, 주행 중 덜컹거림을 탑승으로 착각하기도 했습니다. 
-                            그래서 두 가지 센서를 섞어서 쓰는 <span class="highlight-text">센서 융합(Sensor Fusion)</span> 방식을 고안했습니다.
-                        </p>
-                        <ul style="color: #ccc; font-size: 0.95rem; list-style-type: none; padding-left: 5px; line-height: 1.8;">
-                            <li>✅ <strong>조건 1:</strong> 발판 압력 센서 4개 중 3개 이상이 눌림 (발이 많다는 증거)</li>
-                            <li>✅ <strong>조건 2:</strong> 앞뒤 초음파 센서 거리가 가까워짐 (사람끼리 밀착했다는 증거)</li>
-                        </ul>
-                        <p class="report-text" style="margin-top: 10px;">
-                            특히 주행 중에 센서 값이 튀는 현상을 잡기 위해, 이 두 조건이 <strong>'3번 연속'</strong>으로 감지될 때만 경고음이 울리도록 코드를 수정했습니다. 이렇게 하니 실수로 밟은 건 무시하고 진짜 2인 탑승만 잡아낼 수 있었습니다.
-                        </p>
-                    </div>
-
-                    <div class="report-section">
-                        <span class="report-title">👨‍💻 나의 역할 & 배운 점</span>
-                        <p class="report-text">
-                            <strong>[회로가 내 마음대로 안 될 때]</strong><br>
-                            저는 기술부에서 회로 연결과 아두이노 코딩을 맡았습니다. 이론상으로는 완벽했는데, 막상 선을 연결하니 전원 공급이 불안정해서 센서가 먹통이 되기도 했습니다. 
-                            선 배치를 전부 뜯어고치고 납땜을 다시 하면서 <strong>'하드웨어는 물리적인 안정성이 제일 중요하다'</strong>는 걸 뼈저리게 느꼈습니다.
-                        </p>
-                        <p class="report-text">
-                            <strong>[엔지니어로서의 성장]</strong><br>
-                            단순히 센서를 연결하는 걸 넘어서, 여러 센서를 논리적으로 조합해야 정확도가 올라간다는 걸 배웠습니다. 
-                            비록 모터 제어까지 완벽하게 구현하진 못했지만, 팀원들과 밤늦게까지 센서 값을 테스트하며 문제를 하나씩 해결해 나가는 과정 자체가 저에겐 큰 자산이 되었습니다.
-                        </p>
-                    </div>
-
+                    [여기에 활동 내용을 입력하세요.]
                 </div>
             </div>
 
-           <div class="activity-card" onclick="toggleCard(this)">
+            <div class="activity-card" onclick="toggleCard(this)">
                 <div class="card-header">
-                    <div><span>02.</span> DDC 창의탐구: P2P 블록체인 메신저 개발</div>
-                    <div style="font-size: 0.8rem; color: #888;">▼ 자세히 보기</div>
+                    <div><span>02.</span> [여기에 활동 제목을 입력하세요]</div>
+                    <div style="font-size: 0.8rem;">▼</div>
                 </div>
                 <div class="card-content">
-                    
-                    <div class="report-section">
-                        <span class="report-title">1. 탐구 배경: 단일 실패 지점(SPOF)의 위험</span>
-                        <p class="report-text">
-                            카카오톡 데이터센터 화재 사건을 보며 '중앙 집중형 서버'의 취약점을 깊이 체감했습니다. 
-                            편리함을 위해 모든 데이터를 한곳에 모으는 구조는 화재나 재난 시 모든 소통이 단절되는 '단일 실패 지점(Single Point of Failure)' 문제를 안고 있습니다. 
-                            이에 중앙 서버가 파괴되더라도 개인 간 연결이 유지되는 통신 시스템의 필요성을 느껴, <strong>'서버 없는(Serverless) P2P 메신저'</strong>를 기획하게 되었습니다.
-                        </p>
-                    </div>
-
-                    <div class="report-section">
-                        <span class="report-title">2. 핵심 기술: Socket 통신과 블록체인</span>
-                        <div style="margin-bottom: 15px;">
-                            <span class="tech-tag">Python</span>
-                            <span class="tech-tag">Socket Programming</span>
-                            <span class="tech-tag">SHA-256</span>
-                            <span class="tech-tag">P2P Network</span>
-                        </div>
-                        <p class="report-text">
-                            이 프로젝트의 핵심은 두 가지 기술적 챌린지를 해결하는 것이었습니다.
-                        </p>
-                        <p class="report-text" style="margin-top: 10px;">
-                            <strong>[A. 탈중앙화 통신 구현]</strong><br>
-                            거대 서버를 거치지 않기 위해 Python의 <code>socket</code> 라이브러리를 활용했습니다. 
-                            Client-Server 구조가 아닌, 각 컴퓨터가 서버이자 클라이언트가 되는 P2P 구조를 설계하여 IP 주소만으로 직접 데이터를 주고받는 환경을 구축했습니다.
-                        </p>
-                        <p class="report-text" style="margin-top: 10px;">
-                            <strong>[B. 데이터 무결성 보장 (블록체인)]</strong><br>
-                            중앙 관리자가 없으면 대화 내용의 위변조 위험이 생깁니다. 이를 막기 위해 대화 메시지를 <code>Block</code> 객체로 만들고, 
-                            이전 메시지의 해시값(SHA-256)을 현재 메시지에 포함시키는 체인(Chain) 구조를 적용했습니다. 
-                            누군가 과거 대화를 수정하면 이후 모든 해시값이 깨지도록 설계하여 수학적으로 신뢰를 보장했습니다.
-                        </p>
-                    </div>
-
-                    <div class="report-section">
-                        <span class="report-title">3. 트러블 슈팅 및 결론</span>
-                        <p class="report-text">
-                            <strong>[네트워크 장벽 해결]</strong><br>
-                            로컬호스트(127.0.0.1)에서는 잘 작동하던 코드가 실제 다른 컴퓨터와 연결할 때는 방화벽과 포트(Port) 문제로 접속이 거부되는 현상이 발생했습니다. 
-                            이를 해결하기 위해 핫스팟으로 동일 네트워크 대역을 구성하고, 방화벽 인바운드 규칙을 수정하며 네트워크 계층(OSI 7 Layer)에 대한 이해도를 높였습니다.
-                        </p>
-                        <p class="report-text">
-                            <strong>[최종 산출물]</strong><br>
-                            인터넷망이 끊긴 상황을 가정하고 노트북 2대를 연결하여 채팅을 시연하는 데 성공했습니다. 
-                            기업의 서버가 멈춰도 개인의 소통은 멈추지 않아야 한다는 '디지털 정보 주권'의 가치를 기술적으로 증명해낸 의미 있는 탐구였습니다.
-                        </p>
-                    </div>
-
+                    [여기에 활동 내용을 입력하세요.]
                 </div>
             </div>
+
+            <div class="activity-card" onclick="toggleCard(this)">
+                <div class="card-header">
+                    <div><span>03.</span> [여기에 활동 제목을 입력하세요]</div>
+                    <div style="font-size: 0.8rem;">▼</div>
+                </div>
+                <div class="card-content">
+                    [여기에 활동 내용을 입력하세요.]
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="page4">
+        <h1>Ready to<br><span style="color: var(--accent-blue)">Debug</span> the World.</h1>
+        <p style="margin-top: 30px;">더 성장하는 나를 위해 끊임없이 고민합니다.</p>
+        <p style="margin-top: 50px; font-size: 0.9rem; color: #666;">© 2026 Jeon Heejae. Daejeon Daeshin High School.</p>
+    </section>
+
+</div>
+
+<script>
+    // 페이지 및 스크롤 관리
+    const sections = document.querySelectorAll('section');
+    let currentIndex = 0;
+
+    // 섹션이 보일 때 애니메이션 실행 및 현재 인덱스 갱신
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+                // 현재 보이는 섹션의 번호를 저장 (버튼 기능용)
+                currentIndex = Array.from(sections).indexOf(entry.target);
+            }
+        });
+    }, { threshold: 0.5 });
+
+    sections.forEach(section => {
+        observer.observe(section);
+    });
+
+    // 다음 페이지로 이동
+    function nextPage() {
+        if (currentIndex < sections.length - 1) {
+            currentIndex++;
+            sections[currentIndex].scrollIntoView({ behavior: 'smooth' });
+        }
+    }
+
+    // 이전 페이지로 이동
+    function prevPage() {
+        if (currentIndex > 0) {
+            currentIndex--;
+            sections[currentIndex].scrollIntoView({ behavior: 'smooth' });
+        }
+    }
+
+    // 활동 카드 펼치기/접기
+    function toggleCard(card) {
+        card.classList.toggle('active');
+    }
+</script>
+
+</body>
+</html>
