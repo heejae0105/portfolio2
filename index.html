@@ -244,59 +244,59 @@
                 </div>
             </div>
 
-            <div class="activity-card" onclick="toggleCard(this)">
+           <div class="activity-card" onclick="toggleCard(this)">
                 <div class="card-header">
-                    <div><span>02.</span> [다른 활동 제목]</div>
-                    <div>▼</div>
+                    <div><span>02.</span> DDC 창의탐구: P2P 블록체인 메신저 개발</div>
+                    <div style="font-size: 0.8rem; color: #888;">▼ 자세히 보기</div>
                 </div>
                 <div class="card-content">
+                    
                     <div class="report-section">
-                        <span class="report-title">📌 활동 요약</span>
+                        <span class="report-title">1. 탐구 배경: 단일 실패 지점(SPOF)의 위험</span>
                         <p class="report-text">
-                            여기에 다른 활동 내용을 적으시면 됩니다.
+                            카카오톡 데이터센터 화재 사건을 보며 '중앙 집중형 서버'의 취약점을 깊이 체감했습니다. 
+                            편리함을 위해 모든 데이터를 한곳에 모으는 구조는 화재나 재난 시 모든 소통이 단절되는 '단일 실패 지점(Single Point of Failure)' 문제를 안고 있습니다. 
+                            이에 중앙 서버가 파괴되더라도 개인 간 연결이 유지되는 통신 시스템의 필요성을 느껴, <strong>'서버 없는(Serverless) P2P 메신저'</strong>를 기획하게 되었습니다.
                         </p>
                     </div>
+
+                    <div class="report-section">
+                        <span class="report-title">2. 핵심 기술: Socket 통신과 블록체인</span>
+                        <div style="margin-bottom: 15px;">
+                            <span class="tech-tag">Python</span>
+                            <span class="tech-tag">Socket Programming</span>
+                            <span class="tech-tag">SHA-256</span>
+                            <span class="tech-tag">P2P Network</span>
+                        </div>
+                        <p class="report-text">
+                            이 프로젝트의 핵심은 두 가지 기술적 챌린지를 해결하는 것이었습니다.
+                        </p>
+                        <p class="report-text" style="margin-top: 10px;">
+                            <strong>[A. 탈중앙화 통신 구현]</strong><br>
+                            거대 서버를 거치지 않기 위해 Python의 <code>socket</code> 라이브러리를 활용했습니다. 
+                            Client-Server 구조가 아닌, 각 컴퓨터가 서버이자 클라이언트가 되는 P2P 구조를 설계하여 IP 주소만으로 직접 데이터를 주고받는 환경을 구축했습니다.
+                        </p>
+                        <p class="report-text" style="margin-top: 10px;">
+                            <strong>[B. 데이터 무결성 보장 (블록체인)]</strong><br>
+                            중앙 관리자가 없으면 대화 내용의 위변조 위험이 생깁니다. 이를 막기 위해 대화 메시지를 <code>Block</code> 객체로 만들고, 
+                            이전 메시지의 해시값(SHA-256)을 현재 메시지에 포함시키는 체인(Chain) 구조를 적용했습니다. 
+                            누군가 과거 대화를 수정하면 이후 모든 해시값이 깨지도록 설계하여 수학적으로 신뢰를 보장했습니다.
+                        </p>
+                    </div>
+
+                    <div class="report-section">
+                        <span class="report-title">3. 트러블 슈팅 및 결론</span>
+                        <p class="report-text">
+                            <strong>[네트워크 장벽 해결]</strong><br>
+                            로컬호스트(127.0.0.1)에서는 잘 작동하던 코드가 실제 다른 컴퓨터와 연결할 때는 방화벽과 포트(Port) 문제로 접속이 거부되는 현상이 발생했습니다. 
+                            이를 해결하기 위해 핫스팟으로 동일 네트워크 대역을 구성하고, 방화벽 인바운드 규칙을 수정하며 네트워크 계층(OSI 7 Layer)에 대한 이해도를 높였습니다.
+                        </p>
+                        <p class="report-text">
+                            <strong>[최종 산출물]</strong><br>
+                            인터넷망이 끊긴 상황을 가정하고 노트북 2대를 연결하여 채팅을 시연하는 데 성공했습니다. 
+                            기업의 서버가 멈춰도 개인의 소통은 멈추지 않아야 한다는 '디지털 정보 주권'의 가치를 기술적으로 증명해낸 의미 있는 탐구였습니다.
+                        </p>
+                    </div>
+
                 </div>
             </div>
-
-        </div>
-    </section>
-
-    <section id="page4">
-        <h1>Ready to<br><span style="color: var(--accent-blue)">Debug</span> the World.</h1>
-        <p style="margin-top: 30px;">더 나은 세상을 위해 끊임없이 고민합니다.</p>
-        <p style="margin-top: 50px; font-size: 0.9rem;">© 2026 Jeon Heejae. Daejeon Daeshin High School.</p>
-    </section>
-
-</div>
-
-<script>
-    const container = document.getElementById('mainContainer');
-    const sections = document.querySelectorAll('section');
-    
-    // 스크롤 시 섹션 나타나는 효과
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('visible');
-            }
-        });
-    }, { threshold: 0.1 }); // 10%만 보여도 나타나게 수정 (긴 컨텐츠 대응)
-
-    sections.forEach(section => {
-        observer.observe(section);
-    });
-
-    // 버튼 클릭 시 이동
-    function scrollToPage(pageId) {
-        document.getElementById(pageId).scrollIntoView({ behavior: 'smooth' });
-    }
-
-    // 카드 펼치기/접기
-    function toggleCard(card) {
-        card.classList.toggle('active');
-    }
-</script>
-
-</body>
-</html>
