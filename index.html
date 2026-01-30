@@ -187,6 +187,33 @@
             padding-bottom: 20px; 
             border-top: 1px solid #333;
         }
+        /* --- 여기부터 복사해서 style 태그 맨 아래에 붙여넣으세요 --- */
+
+            /* 1. 페이지 3번(활동 내역)의 고정 높이를 풀고 스크롤을 허용 */
+        #page3 {
+            height: auto !important;       /* 화면 크기에 딱 맞추는 강제 설정 해제 */
+            min-height: 100vh;             /* 내용은 적어도 화면 꽉 차게 */
+            overflow-y: visible !important; /* 내용이 넘치면 스크롤 생기게 설정 */
+            padding-bottom: 100px;         /* 맨 아래 여백 추가 (답답하지 않게) */
+        }
+    
+        /* 2. 카드 내용을 감싸는 박스 설정 */
+        .activity-container {
+            height: auto !important;       /* 컨테이너 높이 자유롭게 */
+            overflow: visible !important;  /* 잘림 방지 */
+            padding-bottom: 50px;
+        }
+
+        /* 3. 카드를 클릭했을 때 펼쳐지는 최대 높이를 아주 크게 늘림 */
+        .    activity-card.active .card-content {
+            max-height: 5000px !important; /* 기존(보통 500px)보다 훨씬 크게 설정 */
+        opacity: 1;
+        }
+
+        /* 4. 모바일/작은 화면에서도 잘리지 않도록 안전장치 */
+        .activity-card {
+        overflow: visible !important;
+        }
 
     </style>
 </head>
