@@ -6,7 +6,7 @@
     <title>Portfolio | Jeon Heejae</title>
     <style>
         @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
-        @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&display=swap'); /* 코드 폰트 추가 */
+        @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&display=swap');
 
         :root {
             --bg: #101010;
@@ -15,7 +15,6 @@
             --accent-teal: #00c897;
             --accent-purple: #c780ff;
             --card-bg: #1e1e1e;
-            /* 요청하신 밝고 푸릇한 코드 색상 */
             --code-color: #64ffda; 
         }
 
@@ -25,7 +24,7 @@
             background-color: var(--bg);
             color: var(--text);
             font-family: 'Pretendard', sans-serif;
-            overflow: hidden; /* 기본 스크롤바 숨김 */
+            overflow: hidden; 
         }
 
         /* --- 컨테이너 설정 --- */
@@ -34,10 +33,9 @@
             overflow-y: scroll;
             scroll-snap-type: y mandatory;
             scroll-behavior: smooth;
-            /* 스크롤바 숨기기 (기능은 유지) */
-            scrollbar-width: none; /* Firefox */
+            scrollbar-width: none; 
         }
-        .container::-webkit-scrollbar { display: none; /* Chrome, Safari */ }
+        .container::-webkit-scrollbar { display: none; }
 
         section {
             height: 100vh;
@@ -73,7 +71,7 @@
         .teal-box { background-color: var(--accent-teal); color: #000; }
         .purple-box { background-color: var(--accent-purple); color: #000; }
 
-        /* --- 배경 코드 애니메이션 (수정됨) --- */
+        /* --- 배경 코드 애니메이션 --- */
         .code-bg-container {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             display: flex; flex-direction: column; justify-content: center;
@@ -86,13 +84,13 @@
 
         .code-line {
             font-family: 'Fira Code', monospace;
-            color: var(--code-color); /* 밝은 푸른색 */
+            color: var(--code-color);
             font-size: 1.4rem; line-height: 1.6;
             white-space: nowrap; font-weight: 600;
-            text-shadow: 0 0 10px rgba(100, 255, 218, 0.3); /* 네온 효과 */
+            text-shadow: 0 0 10px rgba(100, 255, 218, 0.3);
         }
         
-        /* --- 내비게이션 버튼 (신규 추가) --- */
+        /* --- 내비게이션 버튼 --- */
         .nav-buttons {
             position: fixed; right: 30px; top: 50%; transform: translateY(-50%);
             display: flex; flex-direction: column; gap: 20px; z-index: 100;
@@ -107,8 +105,8 @@
             background: var(--accent-blue); color: #000; transform: scale(1.1);
         }
 
-        /* --- 활동 카드 --- */
-        .activity-container { width: 100%; max-width: 800px; padding: 0 20px; z-index: 2; }
+        /* --- 활동 카드 및 보고서 스타일 --- */
+        .activity-container { width: 100%; max-width: 900px; padding: 0 20px; z-index: 2; }
         .activity-card {
             background: var(--card-bg); border: 1px solid #333; border-radius: 12px;
             margin-bottom: 15px; cursor: pointer; overflow: hidden; transition: 0.3s; text-align: left;
@@ -116,8 +114,25 @@
         .activity-card:hover { border-color: var(--accent-teal); transform: translateX(10px); }
         .card-header { padding: 20px; display: flex; justify-content: space-between; align-items: center; font-weight: bold; font-size: 1.2rem; }
         .card-header span:first-child { color: var(--accent-teal); margin-right: 10px; }
-        .card-content { max-height: 0; padding: 0 20px; color: #ccc; transition: all 0.5s ease; font-size: 1rem; line-height: 1.6; }
-        .activity-card.active .card-content { max-height: 300px; padding-bottom: 20px; border-top: 1px solid #333; }
+        
+        .card-content { 
+            max-height: 0; padding: 0 20px; color: #ccc; 
+            transition: all 0.6s ease; font-size: 1rem; line-height: 1.6; opacity: 0;
+        }
+        
+        /* 활성화 시 스타일 (긴 내용 표시) */
+        .activity-card.active .card-content { 
+            max-height: 2000px; 
+            padding-bottom: 30px; 
+            border-top: 1px solid #333;
+            opacity: 1;
+        }
+
+        /* 보고서 내부 디자인 */
+        .report-section { margin-top: 25px; border-left: 3px solid var(--accent-teal); padding-left: 20px; margin-bottom: 30px; }
+        .report-title { color: var(--accent-blue); font-weight: bold; font-size: 1.2rem; margin-bottom: 12px; display: block; text-transform: uppercase; letter-spacing: 1px;}
+        .report-text { font-size: 1rem; color: #ddd; margin-bottom: 10px; line-height: 1.8; word-break: keep-all; }
+        .tech-tag { display: inline-block; background: #333; color: var(--accent-teal); padding: 4px 10px; border-radius: 6px; font-size: 0.85rem; margin-right: 8px; font-family: monospace; border: 1px solid #444;}
 
     </style>
 </head>
@@ -168,38 +183,79 @@
     </section>
 
     <section id="page3">
-        <div class="highlight-box purple-box" style="font-size: 2rem;">2025 Activities</div>
+        <div class="highlight-box purple-box" style="font-size: 2rem;">2025 Projects</div>
         
         <div class="activity-container">
             <div class="activity-card" onclick="toggleCard(this)">
                 <div class="card-header">
-                    <div><span>01.</span> [여기에 활동 제목을 입력하세요]</div>
-                    <div>▼</div>
+                    <div><span>01.</span> IoT 전동 킥보드 2인 탑승 감지 시스템</div>
+                    <div style="font-size: 0.8rem; color: #888;">▼ CLICK for Detail</div>
                 </div>
                 <div class="card-content">
-                    [여기에 활동 내용을 입력하세요.]
+                    
+                    <div class="report-section">
+                        <span class="report-title">📌 Project Overview</span>
+                        <p class="report-text">
+                            <strong>주제:</strong> 압력 및 초음파 센서를 활용한 전동 킥보드 다인 탑승 방지 시스템<br>
+                            <strong>팀명:</strong> KICK (기술부/기술 및 제작 담당)<br>
+                            <strong>목표:</strong> 사회적 문제인 킥보드 2인 탑승 사고를 예방하기 위해, 단순 법적 규제를 넘어 기술적으로 탑승 인원을 감지하고 경고하는 시스템 구현.
+                        </p>
+                    </div>
+
+                    <div class="report-section">
+                        <span class="report-title">⚙️ Engineering Logic & Algorithm</span>
+                        <div style="margin-bottom: 15px;">
+                            <span class="tech-tag">Arduino Uno</span>
+                            <span class="tech-tag">C++</span>
+                            <span class="tech-tag">Sensor Fusion</span>
+                        </div>
+                        <p class="report-text">
+                            단일 센서의 오차를 줄이기 위해 <strong>'Sensor Fusion (센서 융합)'</strong> 방식을 채택하여 두 가지 조건이 동시에 충족될 때만 작동하도록 설계했습니다.
+                        </p>
+                        <ul style="color: #ccc; font-size: 0.95rem; list-style-type: disc; padding-left: 20px; line-height: 1.8;">
+                            <li><strong>Condition A (압력):</strong> 발판에 설치된 4개의 FSR 센서 중 3개 이상에서 압력이 감지됨.</li>
+                            <li><strong>Condition B (밀집도):</strong> 전/후방 초음파 센서 거리의 합이 설정값(밀집 상태) 이하로 떨어짐.</li>
+                            <li><strong>Error Correction (오탐 방지):</strong> 주행 중 진동으로 인한 센서 튀김 현상을 막기 위해, 위 두 조건이 <strong>'3회 연속(Count Logic)'</strong> 감지될 때만 최종적으로 Buzzer 경고를 출력함.</li>
+                        </ul>
+                    </div>
+
+                    <div class="report-section">
+                        <span class="report-title">👨‍💻 My Role & Troubleshooting</span>
+                        <p class="report-text">
+                            <strong>[H/W 설계 및 구현]</strong><br>
+                            아두이노와 센서 간의 회로 배선을 직접 설계했습니다. 이론과 달리 실제 배선에서는 핀 배치 충돌과 전원 공급 문제가 발생했으나, 점퍼선 재배치와 부품 교체를 통해 물리적 연결 안정성을 확보했습니다.
+                        </p>
+                        <p class="report-text">
+                            <strong>[S/W 로직 최적화]</strong><br>
+                            초음파 센서 값이 불규칙하게 튀는 문제를 해결하기 위해 단순히 값을 읽는 것이 아니라, 데이터를 필터링하고 논리적으로 조합(AND 연산)하는 코드를 작성하여 시스템 신뢰도를 높였습니다.
+                        </p>
+                    </div>
+
+                    <div class="report-section">
+                        <span class="report-title">🚀 Growth & Future Improvements</span>
+                        <p class="report-text">
+                            단순한 아이디어를 작동 가능한 프로토타입으로 구현하며 <strong>전자공학과 프로그래밍의 유기적 연결</strong>을 체감했습니다. 초기 목표였던 '모터 속도 제어'까지는 구현하지 못했지만, 하드웨어의 물리적 한계를 소프트웨어적 논리로 보완하는 엔지니어링 역량을 길렀습니다. 앞으로 센서 값을 보정하는 필터링 알고리즘(Kalman Filter 등)을 학습하여 더 정교한 시스템을 만들고자 합니다.
+                        </p>
+                    </div>
+
                 </div>
             </div>
 
             <div class="activity-card" onclick="toggleCard(this)">
                 <div class="card-header">
-                    <div><span>02.</span> [여기에 활동 제목을 입력하세요]</div>
+                    <div><span>02.</span> [다음 프로젝트를 입력하세요]</div>
                     <div>▼</div>
                 </div>
                 <div class="card-content">
-                    [여기에 활동 내용을 입력하세요.]
+                    <div class="report-section">
+                        <span class="report-title">📌 Activity Summary</span>
+                        <p class="report-text">
+                            이곳에 새로운 활동 내용을 위와 같은 형식으로 추가하면 됩니다.
+                        </p>
+                    </div>
                 </div>
             </div>
 
-            <div class="activity-card" onclick="toggleCard(this)">
-                <div class="card-header">
-                    <div><span>03.</span> [여기에 활동 제목을 입력하세요]</div>
-                    <div>▼</div>
-                </div>
-                <div class="card-content">
-                    [여기에 활동 내용을 입력하세요.]
-                </div>
-            </div>
         </div>
     </section>
 
@@ -212,17 +268,14 @@
 </div>
 
 <script>
-    // 페이지 관리 로직
     const container = document.getElementById('mainContainer');
     const sections = document.querySelectorAll('section');
     let currentIndex = 0;
 
-    // 스크롤 감지 및 애니메이션
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 entry.target.classList.add('visible');
-                // 현재 몇 번째 섹션인지 업데이트 (버튼 연동용)
                 currentIndex = Array.from(sections).indexOf(entry.target);
             }
         });
@@ -232,7 +285,6 @@
         observer.observe(section);
     });
 
-    // 버튼 클릭 이동 함수
     function nextPage() {
         if (currentIndex < sections.length - 1) {
             currentIndex++;
@@ -248,6 +300,8 @@
     }
 
     function toggleCard(card) {
+        // 다른 카드 닫기 (선택 사항 - 원하면 주석 제거)
+        // document.querySelectorAll('.activity-card').forEach(c => c !== card && c.classList.remove('active'));
         card.classList.toggle('active');
     }
 </script>
