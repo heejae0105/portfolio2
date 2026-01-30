@@ -189,7 +189,6 @@
         }
         .card-header span:first-child { color: var(--accent-teal); margin-right: 10px; }
         
-        /* 내용이 길어져서 max-height를 넉넉하게 수정함 */
         .card-content { 
             max-height: 0; 
             padding: 0 20px; 
@@ -200,7 +199,7 @@
             word-break: keep-all;
         }
         .activity-card.active .card-content { 
-            max-height: 2000px; /* 내용이 길어도 잘리지 않도록 수정 */
+            max-height: 2000px; 
             padding-bottom: 30px; 
             border-top: 1px solid #333;
         }
@@ -271,10 +270,8 @@
                 </div>
                 <div class="card-content">
                     <p><strong>[Creative Innovation Project]</strong></p>
-                    
                     <h4>1. 프로젝트 개요 (Problem)</h4>
                     <p>전동 킥보드 2인 이상 탑승 사고가 사회적 문제로 대두되었습니다. 단순 경고가 아닌 기술적 제어를 통해 실제 위험 상황만을 정확히 감지하는 시스템을 목표로 했습니다.</p>
-                    
                     <h4>2. 핵심 솔루션 (Solution Logic)</h4>
                     <p>단일 센서의 오작동 한계를 극복하기 위해 <strong>센서 융합(Sensor Fusion)</strong> 방식을 채택했습니다.</p>
                     <ul>
@@ -282,28 +279,41 @@
                         <li><strong>조건 2 (거리):</strong> 초음파 센서(전/후) 거리 합이 기준치 이하</li>
                         <li><strong>알고리즘:</strong> 위 두 조건이 <code>AND</code>로 3회 이상 연속 충족될 때만 '위험'으로 판단하여 오탐을 최소화했습니다.</li>
                     </ul>
-
                     <h4>3. 하드웨어 구성 (Hardware)</h4>
                     <ul>
-                        <li><strong>Controller:</strong> Arduino Uno (신호 처리 및 로직 제어)</li>
-                        <li><strong>Sensors:</strong> FSR 압력센서 4EA, 초음파 센서 4EA</li>
-                        <li><strong>Output:</strong> Buzzer (위험 경고음 출력)</li>
+                        <li><strong>Controller:</strong> Arduino Uno</li>
+                        <li><strong>Sensors:</strong> FSR 압력센서, 초음파 센서</li>
                     </ul>
-
-                    <h4>4. 성장 포인트 (Growth)</h4>
-                    <p>팀장으로서 기술 구현뿐만 아니라 사회적/경제적 관점에서 타당성을 분석했습니다. 특히 센서 값을 단순히 읽는 것을 넘어, <strong>'데이터 누적 판단 알고리즘'</strong>을 통해 시스템의 신뢰도를 높이는 엔지니어링 사고를 길렀습니다.</p>
                 </div>
             </div>
 
             <div class="activity-card" onclick="toggleCard(this)">
                 <div class="card-header">
-                    <div><span>02.</span> 반응형 웹 포트폴리오 구축</div>
+                    <div><span>02.</span> P2P 블록체인 기반 탈중앙 메신저 설계</div>
                     <div style="font-size: 0.8rem;">▼</div>
                 </div>
                 <div class="card-content">
-                    <strong>[목표]</strong> 나만의 개발 아이덴티티를 담은 웹사이트를 직접 구현해보고자 했습니다.<br><br>
-                    <strong>[기술 적용]</strong> HTML5의 시맨틱 태그로 구조를 잡고, CSS3의 <code>Flexbox</code>와 애니메이션(`@keyframes`)을 활용해 인터랙티브한 UI를 설계했습니다. JavaScript로 스크롤 이벤트와 동적 DOM 제어 기능을 추가하여 사용자 경험(UX)을 개선했습니다.<br><br>
-                    <strong>[성과]</strong> GitHub Pages를 통한 정적 웹 호스팅 및 배포의 전 과정을 마스터했습니다.
+                    <p><strong>[Deep Dive Challenge - 탐구 프로젝트]</strong></p>
+                    
+                    <h4>1. 문제 상황 인식 (Problem Definition)</h4>
+                    <p>중앙 집중형 메신저의 데이터센터 화재로 인한 통신 마비 사태를 보며, <strong>단일 실패 지점(SPOF)</strong>의 위험성과 정보 주권 침해 문제를 인식했습니다.</p>
+                    <p>"왜 서버가 멈추면 우리의 대화도 멈춰야 하는가?"라는 질문(5 Whys)을 통해, 중앙 서버 없이 연결되는 구조가 본질적 해결책임을 도출했습니다.</p>
+                    
+                    <h4>2. 탐구 설계 (Golden Circle)</h4>
+                    <ul>
+                        <li><strong>Why (Vision):</strong> 재난이나 검열 상황에서도 개인의 소통은 중단되지 않아야 합니다.</li>
+                        <li><strong>How (Strategy):</strong> 중앙 서버를 제거하고 사용자 간 직접 연결(P2P)을 수행하며, 신뢰성 확보를 위해 블록체인 기술을 적용합니다.</li>
+                        <li><strong>What (Result):</strong> Python 기반의 탈중앙화 메신저 프로토타입 구현.</li>
+                    </ul>
+
+                    <h4>3. 기술적 구현 (Implementation)</h4>
+                    <ul>
+                        <li><strong>P2P Network:</strong> Python <code>Socket</code> 프로그래밍으로 서버 없이 클라이언트 간 직접 통신 환경 구축.</li>
+                        <li><strong>Data Integrity:</strong> 채팅 메시지를 Block 단위로 생성하고, <code>SHA-256</code> 해시 함수로 이전 블록과 연결(Chaining)하여 데이터 위·변조 불가능성 증명.</li>
+                    </ul>
+
+                    <h4>4. 결론 및 가치 (Impact)</h4>
+                    <p>단순한 코딩을 넘어 "기업의 서버가 멈추어도 사람들의 소통은 계속되어야 한다"는 기술의 사회적 가치를 실현했습니다.</p>
                 </div>
             </div>
 
@@ -334,11 +344,9 @@
 </div>
 
 <script>
-    // 페이지 및 스크롤 관리
     const sections = document.querySelectorAll('section');
     let currentIndex = 0;
 
-    // 섹션 관찰자 (Intersection Observer)
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
@@ -352,7 +360,6 @@
         observer.observe(section);
     });
 
-    // 버튼 이동 함수
     function nextPage() {
         if (currentIndex < sections.length - 1) {
             currentIndex++;
@@ -367,7 +374,6 @@
         }
     }
 
-    // 카드 펼치기/접기 함수
     function toggleCard(card) {
         const allCards = document.querySelectorAll('.activity-card');
         allCards.forEach(c => {
