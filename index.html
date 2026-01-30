@@ -51,20 +51,20 @@
             width: 100%;
             display: flex;
             flex-direction: column;
-            align-items: center; /* 전체 중앙 정렬 */
+            align-items: center; 
         }
 
-        /* --- 섹션 공통 스타일 (모두 중앙 정렬) --- */
+        /* --- 섹션 공통 스타일 --- */
         section {
             min-height: 100vh;
             padding: 100px 5%;
             width: 100%;
-            max-width: 1000px; /* 너무 퍼지지 않게 제한 */
+            max-width: 1200px; 
             display: flex;
             flex-direction: column;
             justify-content: center;
-            align-items: center; /* 수평 중앙 정렬 */
-            text-align: center;  /* 텍스트 중앙 정렬 */
+            align-items: center; 
+            text-align: center; 
             position: relative;
             opacity: 0;
             transform: translateY(30px);
@@ -104,32 +104,63 @@
         .teal-box { background-color: var(--accent-teal); color: #000; }
         .purple-box { background-color: var(--accent-purple); color: #000; }
 
-        /* --- 배경 코드 애니메이션 (Page 2) --- */
-        .code-bg-container {
-            position: absolute;
-            top: 50%; left: 50%; 
-            transform: translate(-50%, -50%);
-            width: 100%; 
-            display: flex;
-            flex-direction: column;
-            align-items: center; /* 코드도 중앙 정렬 */
-            justify-content: center;
-            padding: 40px;
-            pointer-events: none; 
-            opacity: 0;
-            transition: opacity 1.5s ease-out;
-            z-index: 1;
+
+        /* --- Page 2: Split Layout (Text Left, Code Right) --- */
+        #page2 {
+            flex-direction: row; /* 가로 배치 */
+            justify-content: space-between;
+            align-items: center;
+            text-align: left; /* 텍스트 왼쪽 정렬 */
+            gap: 50px;
         }
-        section.visible .code-bg-container { opacity: 0.1; }
-        .code-line {
+
+        .page2-content {
+            flex: 1;
+            z-index: 2;
+        }
+
+        /* 코드 박스 디자인 (화면 오른쪽에 배치) */
+        .code-display {
+            flex: 1;
+            background: #151515;
+            padding: 30px;
+            border-radius: 12px;
+            border: 1px solid #333;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
             font-family: 'Fira Code', monospace;
-            color: var(--code-color);
-            font-size: 1.2rem;
-            line-height: 1.6;
-            white-space: nowrap;
-            font-weight: 600;
+            text-align: left;
+            position: relative;
+            transform: perspective(1000px) rotateY(-10deg); /* 살짝 입체감 */
+            transition: transform 0.5s;
         }
         
+        .code-display:hover {
+            transform: perspective(1000px) rotateY(0deg);
+        }
+
+        .code-display::before {
+            content: "● ● ●";
+            color: #555;
+            font-size: 10px;
+            position: absolute;
+            top: 10px;
+            left: 15px;
+            letter-spacing: 5px;
+        }
+
+        .code-line {
+            color: var(--code-color);
+            font-size: 1.1rem;
+            line-height: 1.6;
+            white-space: pre-wrap; /* 줄바꿈 허용 */
+            font-weight: 500;
+            margin-top: 15px; /* 상단 점과 간격 */
+        }
+        
+        .keyword { color: var(--accent-purple); }
+        .string { color: var(--accent-teal); }
+        .func { color: var(--accent-blue); }
+
         /* --- 내비게이션 버튼 --- */
         .nav-buttons {
             position: fixed;
@@ -162,7 +193,7 @@
         /* --- 활동 카드 (Page 3) --- */
         .activity-container { 
             width: 100%; 
-            max-width: 900px; /* 넓게 사용 */
+            max-width: 900px; 
             z-index: 2; 
         }
         
@@ -174,7 +205,7 @@
             cursor: pointer;
             overflow: hidden;
             transition: 0.3s;
-            text-align: left; /* 카드 내부는 가독성을 위해 좌측 정렬하되, 제목은 중앙 정렬 예정 */
+            text-align: left; 
             position: relative;
         }
         .activity-card:hover { border-color: var(--accent-teal); transform: translateY(-5px); }
@@ -198,17 +229,16 @@
             line-height: 1.8;
             word-break: break-all;
             opacity: 0;
-            background: #151515; /* 내용 부분 배경을 살짝 어둡게 */
+            background: #151515;
         }
         
         .activity-card.active .card-content { 
-            max-height: 6000px; /* 내용이 매우 길므로 충분히 확보 */
+            max-height: 8000px; 
             opacity: 1;
             padding-bottom: 50px; 
             border-top: 1px solid #333;
         }
         
-        /* 카드 내부 이미지 스타일 */
         .card-img {
             width: 100%;
             max-width: 100%;
@@ -218,7 +248,6 @@
             box-shadow: 0 4px 20px rgba(0,0,0,0.5);
         }
 
-        /* 카드 내부 타이틀 스타일 */
         .card-content h3 {
             color: #fff;
             margin: 40px 0 15px 0;
@@ -237,23 +266,47 @@
         .card-content p {
             color: #ccc;
             margin-bottom: 15px;
-            text-align: justify; /* 긴 글 가독성 확보 */
+            text-align: justify; 
         }
 
         .card-content ul { list-style: none; padding-left: 5px; margin-bottom: 20px;}
         .card-content li { margin-bottom: 8px; position: relative; padding-left: 15px; text-align: left;}
         .card-content li::before { content: "•"; color: var(--accent-teal); position: absolute; left: 0; font-weight: bold;}
 
+        /* 표 스타일 (Activity 2 Golden Circle용) */
+        .golden-circle-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        .golden-circle-table th, .golden-circle-table td {
+            border: 1px solid #444;
+            padding: 12px;
+            text-align: left;
+        }
+        .golden-circle-table th {
+            background: rgba(92, 225, 230, 0.1);
+            color: var(--accent-blue);
+            width: 20%;
+        }
+
         /* 소제목 강조 */
         .project-tag {
             display: inline-block;
             padding: 5px 12px;
-            background: rgba(92, 225, 230, 0.1);
-            color: var(--accent-blue);
+            background: rgba(199, 128, 255, 0.15);
+            color: var(--accent-purple);
             border-radius: 4px;
             font-size: 0.9rem;
             margin-bottom: 20px;
             font-weight: 600;
+        }
+        
+        /* 반응형: 모바일에서는 다시 세로 배치 */
+        @media (max-width: 768px) {
+            #page2 { flex-direction: column; text-align: center; }
+            .code-display { width: 100%; margin-top: 30px; transform: none; }
+            .code-display:hover { transform: none; }
         }
 
     </style>
@@ -279,24 +332,33 @@
     </section>
 
     <section id="page2">
-        <div class="code-bg-container">
-            <div class="code-line">class JeonHeejae:</div>
-            <div class="code-line">def __init__(self):</div>
-            <div class="code-line">self.role = "Student Developer"</div>
-            <div class="code-line">self.passion = "Infinite Growth"</div>
+        <div class="page2-content">
+            <p style="font-size: 1.5rem; font-weight: bold; color: #fff;">My Philosophy</p>
+            <div class="highlight-box teal-box" style="margin: 15px 0 30px 0; font-size: 2rem;">질문이 정답을 만듭니다</div>
+            <p style="font-size: 1.1rem; line-height: 1.8;">
+                "현상 이면의 원리를 탐구하고,<br>
+                가장 효율적인 알고리즘으로 구현합니다."
+            </p>
+            
+            <div style="margin-top: 40px;">
+                <p style="color:var(--accent-blue); font-weight:bold; margin-bottom:15px;">Tech Stacks</p>
+                <span style="font-family: 'Fira Code', monospace; color: #fff; font-size: 1rem; border: 1px solid #333; padding: 12px 25px; border-radius: 8px; background: #1a1a1a;">
+                    Python · HTML/CSS · JS
+                </span>
+            </div>
         </div>
 
-        <p>My Philosophy</p>
-        <div class="highlight-box teal-box">질문이 정답을 만듭니다</div>
-        <p style="margin-top: 20px; max-width: 600px;">
-            "현상 이면의 원리를 탐구하고,<br>가장 효율적인 알고리즘으로 구현합니다."
-        </p>
-        
-        <div style="margin-top: 40px;">
-            <p style="color:var(--accent-blue); font-weight:bold; margin-bottom:10px;">Tech Stacks</p>
-            <span style="font-family: monospace; color: #fff; font-size: 1rem; border: 1px solid #333; padding: 10px 20px; border-radius: 8px; background: #1a1a1a;">
-                Python · HTML/CSS · JS · Arduino · C
-            </span>
+        <div class="code-display">
+            <div class="code-line"><span class="keyword">class</span> JeonHeejae:</div>
+            <div class="code-line">  <span class="keyword">def</span> <span class="func">__init__</span>(self):</div>
+            <div class="code-line">    self.role = <span class="string">"Student Developer"</span></div>
+            <div class="code-line">    self.passion = <span class="string">"Infinite Growth"</span></div>
+            <div class="code-line">    self.goal = <span class="string">"Change the World"</span></div>
+            <div class="code-line"></div>
+            <div class="code-line">  <span class="keyword">def</span> <span class="func">coding</span>(self):</div>
+            <div class="code-line">    <span class="keyword">while</span> True:</div>
+            <div class="code-line">      analyze_problem()</div>
+            <div class="code-line">      make_solution()</div>
         </div>
     </section>
 
@@ -332,15 +394,62 @@
                     <div style="font-size: 1.5rem; color:var(--accent-blue);">+</div>
                 </div>
                 <div class="card-content">
-                    <span class="project-tag">Deep Dive Challenge</span>
-                    <p>중앙 서버 화재로 인한 통신 마비 사태를 보며, 중앙 서버 없는 메신저의 필요성을 느꼈습니다.</p>
-                    
-                    <h4>[ 기술적 구현 내용 ]</h4>
+                    <div style="text-align: center;">
+                        <span class="project-tag">Deep Dive Challenge (DDC) 탐구 프로젝트</span>
+                    </div>
+
+                    <h3>1. 탐구 배경 및 문제 인식</h3>
+                    <p>카카오톡과 같은 중앙 집중형 메신저 서비스는 편리성과 확장성 면에서 큰 장점을 지니고 있으나, <strong>단일 서버에 모든 통신과 데이터가 집중되는 구조(SPOF, Single Point of Failure)</strong>라는 근본적인 한계를 가지고 있습니다.</p>
+                    <p>실제로 대형 데이터센터 화재나 행정적 조치가 발생할 경우, 수천만 명의 사용자가 동시에 소통 불능 상태에 놓이며, 개인의 사적인 대화 기록이 제3자의 통제 아래 놓일 수 있다는 문제가 드러났습니다. 본 탐구는 중앙 서버가 사라지더라도 소통이 지속될 수 있는 구조적 대안을 기술적으로 제시하는 것을 목표로 합니다.</p>
+
+                    <h3>2. 5 WHY 분석을 통한 본질 문제 도출</h3>
+                    <p>표면적인 장애 현상이 아닌 구조적 원인을 파악하기 위해 5 WHY 분석을 수행하였습니다.</p>
                     <ul>
-                        <li><strong>Python Socket Programming:</strong> 중앙 서버를 거치지 않고 PC 간 직접 통신(P2P) 환경을 구축했습니다.</li>
-                        <li><strong>Blockchain Data Integrity:</strong> 대화 내용을 블록 단위로 저장하고 해시(Hash)로 연결하여, 데이터 위변조가 불가능하도록 설계했습니다.</li>
+                        <li><strong>Why 1 (문제):</strong> 서버 장애 시 모든 사용자의 소통이 중단되고 데이터 통제권이 없다.</li>
+                        <li><strong>Why 2 (원인):</strong> 통신 중계와 데이터 저장이 하나의 중앙 서버에 집중되어 있기 때문이다.</li>
+                        <li><strong>Why 3 (구조):</strong> 기업 입장에서 비용 효율적이며 데이터 독점이 용이하기 때문이다.</li>
+                        <li><strong>Why 4 (한계):</strong> 백업 서버가 존재해도 관리 권한은 여전히 특정 기업에 집중된다.</li>
+                        <li><strong>Why 5 (본질):</strong> <strong>효율성을 이유로 데이터를 중앙에 집중시키는 구조 자체가 문제이다.</strong></li>
                     </ul>
-                    <p>이 프로젝트를 통해 네트워크의 본질과 데이터 무결성, 그리고 탈중앙화의 가치에 대해 깊게 탐구했습니다.</p>
+                    <p style="color: var(--accent-teal); font-weight: bold; margin-top: 10px;">
+                        ▶ 해결책: 중앙 서버 없이 사용자 간 직접 연결이 가능한 P2P 네트워크 구조가 필요하다.
+                    </p>
+
+                    <h3>3. Golden Circle 기반 탐구 설계</h3>
+                    <table class="golden-circle-table">
+                        <tr>
+                            <th>WHY (Vision)</th>
+                            <td>재난, 검열, 서버 마비 상황에서도 멈추지 않고 작동하는 안전한 소통 수단을 구현하여, <strong>정보 주권을 개인에게 되돌린다.</strong></td>
+                        </tr>
+                        <tr>
+                            <th>HOW (Strategy)</th>
+                            <td>
+                                1. <strong>Python Socket</strong> 프로그래밍을 활용한 P2P(Peer-to-Peer) 통신 환경 구축<br>
+                                2. <strong>블록체인 구조</strong>를 단순화하여, 채팅 메시지를 Block 단위로 연결 (SHA-256 해시 활용)
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>WHAT (Result)</th>
+                            <td>블록체인 기반 P2P 메신저 프로토타입 구현 및 검증</td>
+                        </tr>
+                    </table>
+
+                    <h3>4. 구현 및 산출물</h3>
+                    <h4>4.1 기술적 구현</h4>
+                    <ul>
+                        <li><strong>Python Socket:</strong> 중앙 서버를 거치지 않고 Client 간 직접 메시지 패킷 전송</li>
+                        <li><strong>Data Integrity:</strong> 이전 대화의 해시값을 현재 대화에 포함시켜 체인(Chain) 구조 형성 → 데이터 위변조 시 체인이 끊겨 즉시 탐지 가능</li>
+                    </ul>
+
+                    <h4>4.2 최종 산출물 구성</h4>
+                    <ul>
+                        <li><strong>탐구 보고서:</strong> 중앙 서버 구조의 한계 분석 및 Block 클래스 구조 설명</li>
+                        <li><strong>북 포스터:</strong> 『신뢰의 프로토콜』의 개념을 블록체인 채팅 구조와 연결하여 시각화</li>
+                        <li><strong>폼보드 발표물:</strong> 문제 정의 → 해결 구조 → 실제 구현 결과를 통합 제시</li>
+                    </ul>
+
+                    <h3>5. 결론 및 의의</h3>
+                    <p>이번 프로젝트를 통해 단순 코드 구현을 넘어, 네트워크 구조와 데이터 무결성의 원리를 실험적으로 검증했습니다. 또한 <strong>"기업의 서버가 멈추었다고 사람들의 대화까지 멈추어서는 안 된다"</strong>는 신념을 기술로 구현해내며, 기술이 사회 문제를 해결하는 방식에 대해 깊이 고찰했습니다.</p>
                 </div>
             </div>
 
@@ -357,80 +466,35 @@
                     <img src="image_65f307.png" alt="DealChecker UI" class="card-img">
 
                     <h3>1. 프로젝트 개요</h3>
-                    <p>현대 사회에서 계약서는 주거, 고용, 금융 등 일상 전반에 깊이 관여하고 있지만, 전문적인 법률 지식이 없는 일반 사용자가 계약서의 불공정 조항이나 잠재적 위험 요소를 스스로 식별하기는 어렵습니다. 특히 청년층의 경우 정보 접근성과 법률 이해도의 한계로 인해 불리한 계약을 체결하는 사례가 반복되고 있습니다.</p>
+                    <p>현대 사회에서 계약서는 주거, 고용, 금융 등 일상 전반에 깊이 관여하고 있지만, 전문적인 법률 지식이 없는 일반 사용자가 계약서의 불공정 조항이나 잠재적 위험 요소를 스스로 식별하기는 어렵습니다.</p>
                     <p>본 프로젝트 <strong>DealChecker</strong>는 이러한 문제를 해결하기 위해, <strong>AI 기반 자연어 처리 기술을 활용하여 계약서를 자동 분석하고 불공정 조항을 시각적으로 제공하는 웹 플랫폼</strong>을 개발하는 것을 목표로 진행되었습니다.</p>
-                    <p>나아가 단순 분석에 그치지 않고, 개인 계약 이력을 체계적으로 관리할 수 있는 기능을 포함함으로써 실질적인 법률 지원 도구로 확장 가능성을 제시하였습니다.</p>
 
                     <h3>2. 개발 동기 및 목적</h3>
-                    <h4>2.1 개발 동기</h4>
                     <ul>
                         <li>중앙화된 법률 정보 구조로 인해 일반 사용자는 계약의 위험성을 스스로 판단하기 어려움</li>
-                        <li>불공정 조항은 존재하더라도, 이를 인지하지 못한 채 계약이 체결되는 구조적 문제</li>
-                        <li>특히 청년층을 중심으로 법률 서비스 접근성의 격차가 사회 문제로 대두</li>
-                    </ul>
-                    <h4>2.2 개발 목적</h4>
-                    <ul>
-                        <li>AI 기반 계약서 분석 기능을 통해 법률 지식이 부족한 사용자도 계약 내용을 이해할 수 있도록 지원</li>
                         <li>불공정 조항을 자동 탐지·시각화하여 의사결정의 공정성 강화</li>
                         <li>개인별 계약서를 저장·관리할 수 있는 구조를 통해 지속적인 법률 관리 플랫폼 구현</li>
                     </ul>
 
                     <h3>3. 이론적 배경</h3>
-                    <h4>3.1 자연어 처리 (NLP)</h4>
-                    <p>자연어 처리란 인간의 언어를 컴퓨터가 이해하고 분석할 수 있도록 하는 인공지능 기술입니다. 본 프로젝트에서는 계약서와 같은 비정형 텍스트 문서를 분석하여 조항의 의미를 파악하고 위험 요소를 식별하는 데 활용하였습니다.</p>
-                    <h4>3.2 파인튜닝 (Fine-Tuning)</h4>
-                    <p>사전 학습된 언어 모델은 일반적인 언어 패턴을 학습한 상태이므로, 법률 문서와 같은 특수 도메인에서는 한계가 존재합니다. 이에 따라 불공정 계약 조항 데이터셋을 기반으로 모델을 파인튜닝하여, 계약서 분석에 특화된 성능을 확보하였습니다.</p>
+                    <h4>3.1 자연어 처리 & 파인튜닝</h4>
+                    <p>계약서와 같은 비정형 텍스트를 분석하기 위해 NLP 기술을 활용했습니다. 일반 언어 모델은 법률 용어에 약하므로, 불공정 계약 조항 데이터셋으로 모델을 <strong>파인튜닝(Fine-Tuning)</strong>하여 분석 성능을 극대화했습니다.</p>
 
-                    <h3>4. 개발 방법 및 과정</h3>
-                    <h4>4.1 개발 기간 및 환경</h4>
-                    <p>기간: 2025년 7월 31일 ~ 2025년 8월 2일<br>장소: 대전대신고등학교 프로젝트실</p>
-                    
-                    <h4>4.2 개발 절차</h4>
-                    <ul>
-                        <li><strong>1) 데이터 수집 및 전처리:</strong> 실제 근로계약서, 임대차 계약서 사례 조사 및 불공정 조항 선별, 텍스트 정제 및 라벨링</li>
-                        <li><strong>2) AI 모델 파인튜닝:</strong> 사전 학습된 언어 모델을 기반으로 불공정 조항 판별 목적에 맞게 추가 학습 진행 (정확도 및 재현율 개선)</li>
-                        <li><strong>3) 웹사이트 개발:</strong> Python(Flask) 기반 서버 구축, HTML/CSS UI 설계, 계약서 업로드 시 자동 분석 시각화 기능 구현</li>
-                        <li><strong>4) 테스트 및 검증:</strong> 가상의 계약서를 입력하여 분석 결과 확인 및 실제 법률 자료와 비교 검증</li>
-                    </ul>
-
-                    <h3>5. 주요 기능 및 결과</h3>
-                    <h4>5.1 AI 계약서 분석 기능</h4>
+                    <h3>4. 주요 기능 및 결과</h3>
+                    <h4>4.1 AI 계약서 분석 기능</h4>
                     <ul>
                         <li>사용자가 계약서를 업로드하면 AI가 자동으로 내용을 분석</li>
-                        <li>불공정 가능성이 있는 조항을 탐지하여 시각적으로 표시</li>
-                        <li>법률 지식이 없는 사용자도 핵심 위험 요소를 직관적으로 이해 가능</li>
+                        <li>불공정 가능성이 있는 조항을 탐지하여 시각적으로 표시 (위험 요소 직관적 이해)</li>
                     </ul>
-                    <h4>5.2 계약 이력 관리 기능</h4>
+                    <h4>4.2 기술 스택</h4>
                     <ul>
-                        <li>개인별 계약서 저장 및 관리 전용 페이지 제공</li>
-                        <li>계약별 분석 결과를 누적 관리하여 단순 도구를 넘어 개인 법률 기록 관리 플랫폼으로 확장</li>
+                        <li><strong>AI:</strong> Python, PyTorch (Fine-tuning)</li>
+                        <li><strong>Web:</strong> Flask, HTML/CSS</li>
+                        <li><strong>Tool:</strong> Google Colab, Figma, GitHub</li>
                     </ul>
 
-                    <h3>6. 개발 환경</h3>
-                    <ul>
-                        <li>개발 언어: Python 3.x</li>
-                        <li>IDE / 에디터: Visual Studio Code</li>
-                        <li>데이터 처리: Google Colab, Jupyter Notebook</li>
-                        <li>웹 프레임워크: Flask</li>
-                        <li>형상 관리: GitHub</li>
-                        <li>디자인 도구: Figma (UI/UX 시안 제작)</li>
-                        <li>실행 환경: 로컬 서버 (Windows)</li>
-                    </ul>
-
-                    <h3>7. 결론 및 제언</h3>
-                    <h4>7.1 결론</h4>
-                    <p>본 프로젝트를 통해 AI를 활용한 계약서 분석 웹 플랫폼을 실제로 구현함으로써, 법률 지식이 부족한 사용자도 계약의 공정성을 사전에 점검할 수 있음을 확인하였습니다. 이는 단순한 정보 제공을 넘어, 사회 문제 해결에 기여할 수 있는 IT 기반 서비스 모델로서의 가능성을 입증한 사례입니다.</p>
-                    
-                    <h4>7.2 향후 개선 방향</h4>
-                    <ul>
-                        <li>실제 계약서 데이터 추가 수집을 통한 분석 정확도 향상</li>
-                        <li>모바일 환경 대응 및 접근성 강화</li>
-                        <li>지자체·공공기관과의 협력을 통한 공공 법률 지원 플랫폼으로 확장</li>
-                        <li>계약 유형별(근로, 임대차, 금융) 맞춤형 분석 기능 고도화</li>
-                    </ul>
-
-                    <h3>8. 프로젝트 의의</h3>
-                    <p>DealChecker는 기술적 완성도뿐 아니라, AI 기술을 사회적 약자의 문제 해결에 적용한 사례라는 점에서 의미가 큽니다. 본 프로젝트를 통해 AI·데이터·웹 기술을 융합하여 실질적인 사회적 가치를 창출하는 경험을 할 수 있었으며, 이는 향후 공학·AI·소프트웨어 분야 진로를 구체화하는 데 중요한 기반이 되었습니다.</p>
+                    <h3>5. 결론 및 의의</h3>
+                    <p>DealChecker는 기술적 완성도뿐 아니라, AI 기술을 사회적 약자의 문제 해결에 적용한 사례라는 점에서 의미가 큽니다. 본 프로젝트를 통해 AI·데이터·웹 기술을 융합하여 실질적인 사회적 가치를 창출하는 경험을 할 수 있었습니다.</p>
                 </div>
             </div>
 
